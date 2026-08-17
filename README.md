@@ -2,7 +2,7 @@
 
 自己完結型HTML。外部CDNなし。月次KPIと週次X記事提案を1ファイルで切り替える。
 
-公開URL: リポジトリの GitHub Pages（main /）
+公開URL: https://ryota-muku.github.io/x-account-monthly-dashboard/
 
 ## 更新の流れ
 
