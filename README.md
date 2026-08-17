@@ -34,11 +34,11 @@ CSVがなくても、既存HTMLの履歴は残る。新しい週次JSONだけ渡
 
 ## 画面
 
-1. Overview
-2. Monthly Trends
-3. Weekday
-4. Best / Worst
-5. Weekly Articles
-6. Rules & Data
+1. Overview — フォロー転換コックピット
+2. Market — 競合AI記事 vs 自垢の軸
+3. Conversion — テーマ別の遷移と転換
+4. Plan — 今週の記事7本と毎日のポスト
+5. Trends — 月次・曜日・ベストワースト
+6. Rules — 指標定義
 
-週次タブは公開の閲覧・保存と、手元の週次JSONだけを使う。日別アカウント概要から記事テーマは断定しない。
+日次CSVから記事テーマは断定しない。テーマ判定は投稿別CSVと公開記事だけを使う。
