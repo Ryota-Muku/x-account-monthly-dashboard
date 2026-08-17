@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08131f">
+  <title>むく | X Monthly Analytics</title>
+  <style>
+    :root {
+      --ink: #102536;
+      --muted: #647786;
+      --line: #dfe8ec;
+      --paper: #f4f7f8;
+      --white: #ffffff;
+      --navy: #08131f;
+      --navy-2: #102536;
+      --cyan: #22d3b6;
+      --cyan-dark: #0b8f7d;
+      --cyan-soft: #dff8f3;
+      --purple: #8b5cf6;
+      --purple-soft: #efe9ff;
+      --blue: #2f80ed;
+      --blue-soft: #e8f2ff;
+      --red: #e9584f;
+      --red-soft: #fff0ee;
+      --orange: #ed8a28;
+      --orange-soft: #fff4e8;
+      --green: #168c68;
+      --green-soft: #e6f6f0;
+      --shadow: 0 16px 44px rgba(8, 19, 31, 0.08);
+      --radius: 18px;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% -10%, rgba(34, 211, 182, 0.16), transparent 28rem),
+        var(--paper);
+      font-family: Inter, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: 34px clamp(22px, 5vw, 72px) 28px;
+      color: var(--white);
+      background: linear-gradient(125deg, var(--navy), #13283a 68%, #10483f);
+    }
+    .masthead::after {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      right: -110px;
+      top: -180px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      box-shadow: 0 0 0 48px rgba(255,255,255,.035), 0 0 0 96px rgba(255,255,255,.025);
+    }
+    .masthead-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: end;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      max-width: 900px;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+    .header-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      color: #bdd0da;
+      font-size: 13px;
+    }
+    .month-control {
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+    }
+    .month-control label {
+      color: #bdd0da;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .month-control select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 12px;
+      padding: 12px 42px 12px 14px;
+      color: var(--white);
+      background: rgba(255,255,255,.1);
+      outline: none;
+    }
+    .month-control select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34,211,182,.2); }
+    .month-control option { color: var(--ink); background: var(--white); }
+
+    .nav-wrap {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      border-bottom: 1px solid var(--line);
+      background: rgba(244,247,248,.92);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 11px clamp(18px, 5vw, 72px);
+      overflow-x: auto;
+    }
+    .nav button {
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .nav button.active { color: var(--white); background: var(--navy-2); }
+
+    main {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 30px clamp(18px, 5vw, 72px) 72px;
+    }
+    .view[hidden] { display: none; }
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .section-heading h2 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
+    .section-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: var(--green);
+      background: var(--green-soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .badge.provisional { color: var(--orange); background: var(--orange-soft); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, .75fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .direction-card, .target-card, .panel, .kpi-card {
+      border: 1px solid rgba(16,37,54,.08);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+    .direction-card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 4vw, 42px);
+      color: var(--white);
+      background: linear-gradient(130deg, #5f36ba, #8b5cf6 55%, #1f8f82);
+    }
+    .direction-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -80px -140px auto;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 50%;
+    }
+    .direction-card .label, .target-card .label {
+      margin: 0 0 14px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .direction-card h2 {
+      position: relative;
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(26px, 3.8vw, 48px);
+      line-height: 1.18;
+      letter-spacing: -.045em;
+    }
+    .direction-card .reason {
+      position: relative;
+      max-width: 820px;
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.86);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .target-card { padding: 24px; }
+    .target-card .label { color: var(--cyan-dark); }
+    .target-card h3 { margin: 0 0 16px; font-size: 19px; }
+    .target-list { display: grid; gap: 11px; }
+    .target-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .target-item:last-child { border-bottom: 0; padding-bottom: 0; }
+    .target-item strong { color: var(--ink); font-size: 14px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .kpi-card { padding: 18px; box-shadow: 0 10px 28px rgba(8,19,31,.05); }
+    .kpi-card .kpi-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .kpi-card .kpi-value { margin-top: 10px; font-size: clamp(24px, 3vw, 36px); font-weight: 850; letter-spacing: -.04em; }
+    .kpi-foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; color: var(--muted); font-size: 11px; }
+    .delta { font-weight: 800; }
+    .delta.good { color: var(--green); }
+    .delta.bad { color: var(--red); }
+    .delta.neutral { color: var(--muted); }
+
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 22px; }
+    .panel { padding: 22px; box-shadow: 0 10px 28px rgba(8,19,31,.05); }
+    .panel-header { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 16px; }
+    .panel h3 { margin: 0; font-size: 17px; }
+    .panel-note { color: var(--muted); font-size: 11px; }
+    .chart { min-height: 290px; }
+    .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .chart text { fill: var(--muted); font-size: 10px; }
+    .chart .grid { stroke: #e8eef1; stroke-width: 1; }
+    .chart .axis { stroke: #b8c7ce; stroke-width: 1; }
+    .chart .series-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .chart .point { stroke: var(--white); stroke-width: 2; }
+    .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; color: var(--muted); font-size: 11px; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i { width: 10px; height: 10px; border-radius: 50%; }
+
+    .action-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 18px; }
+    .action-list { display: grid; gap: 10px; counter-reset: action; }
+    .action-item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--cyan-soft);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .action-item::before {
+      counter-increment: action;
+      content: counter(action);
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--cyan-dark);
+      font-weight: 850;
+    }
+    .stop-keep { display: grid; gap: 10px; }
+    .mini-callout { padding: 13px; border-radius: 12px; font-size: 12px; line-height: 1.6; }
+    .mini-callout strong { display: block; margin-bottom: 4px; font-size: 10px; letter-spacing: .12em; }
+    .mini-callout.stop { color: #8c2e29; background: var(--red-soft); }
+    .mini-callout.keep { color: #0d654b; background: var(--green-soft); }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 12px; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+    th { position: sticky; top: 0; z-index: 1; color: #dbe8ee; background: var(--navy-2); font-size: 10px; letter-spacing: .03em; }
+    th:first-child, td:first-child { text-align: left; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover td { background: #f7fbfc; }
+    .current-row td { background: var(--cyan-soft); font-weight: 750; }
+
+    .weekday-layout { display: grid; grid-template-columns: minmax(320px, .8fr) minmax(0, 1.2fr); gap: 18px; }
+    .bars { display: grid; gap: 12px; }
+    .bar-row { display: grid; grid-template-columns: 42px 1fr 86px; gap: 10px; align-items: center; font-size: 12px; }
+    .bar-track { height: 12px; overflow: hidden; border-radius: 999px; background: #edf2f4; }
+    .bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan-dark), var(--cyan)); }
+    .bar-value { color: var(--muted); text-align: right; }
+
+    .rank-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 22px; }
+    .rank-card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+    .rank-title { padding: 14px 18px; color: var(--white); font-size: 13px; font-weight: 850; }
+    .rank-title.best { background: var(--green); }
+    .rank-title.worst { background: var(--red); }
+    .rank-list { display: grid; }
+    .rank-item { display: grid; grid-template-columns: 28px 90px 1fr auto; gap: 10px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .rank-item:last-child { border-bottom: 0; }
+    .rank-no { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; color: var(--muted); background: var(--paper); font-size: 10px; font-weight: 850; }
+    .rank-date { color: var(--muted); }
+    .rank-value { font-weight: 850; }
+
+    .rules-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .rule-card { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+    .rule-card h3 { margin: 0 0 7px; font-size: 14px; }
+    .rule-card code { color: var(--purple); background: var(--purple-soft); padding: 3px 6px; border-radius: 6px; font-family: inherit; font-size: 11px; }
+    .rule-card p { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ghost-button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: var(--ink);
+      background: var(--white);
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .ghost-button:hover { border-color: var(--cyan-dark); color: var(--cyan-dark); }
+    .empty { padding: 30px; color: var(--muted); text-align: center; }
+
+    .pattern-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .pattern-card { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+    .pattern-card .label { margin: 0 0 8px; color: var(--cyan-dark); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+    .pattern-card h3 { margin: 0 0 8px; font-size: 16px; }
+    .pattern-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .plan-list { display: grid; gap: 10px; }
+    .plan-item {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+    }
+    .plan-item.swap { background: var(--orange-soft); border-color: #f0d2aa; }
+    .plan-day { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .plan-item h3 { margin: 0 0 6px; font-size: 15px; }
+    .plan-meta, .plan-core { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .slot-pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    .slot-pill.core { color: #0d654b; background: var(--green-soft); }
+    .slot-pill.swap { color: #8a4b12; background: #ffe4c2; }
+
+    @media (max-width: 1050px) {
+      .hero, .weekday-layout, .action-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .masthead-grid, .two-col, .rank-grid, .rules-grid, .pattern-grid { grid-template-columns: 1fr; }
+      .plan-item { grid-template-columns: 1fr; }
+      .month-control { min-width: 0; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .direction-card h2 { font-size: 28px; }
+      .chart { min-height: 230px; }
+      .section-heading { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 520px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .rank-item { grid-template-columns: 26px 1fr auto; }
+      .rank-item .rank-weekday { display: none; }
+    }
+    @media print {
+      .nav-wrap, .month-control, .toolbar { display: none !important; }
+      body { background: var(--white); }
+      .view[hidden] { display: block; }
+      .view { break-after: page; }
+      .panel, .kpi-card, .direction-card, .target-card { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-grid">
+      <div>
+        <p class="eyebrow">X Monthly Intelligence</p>
+        <h1>むく</h1>
+        <div class="header-meta">
+          <span id="dataRange"></span>
+          <span id="comparisonMeta"></span>
+        </div>
+      </div>
+      <div class="month-control">
+        <label for="monthSelect">分析する月</label>
+        <select id="monthSelect" aria-label="分析する月を選択"></select>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-wrap">
+    <nav class="nav" aria-label="ダッシュボード表示">
+      <button class="active" data-view="overview">Overview</button>
+      <button data-view="trends">Monthly Trends</button>
+      <button data-view="weekday">Weekday</button>
+      <button data-view="days">Best / Worst</button>
+      <button data-view="weekly">Weekly Articles</button>
+      <button data-view="rules">Rules &amp; Data</button>
+    </nav>
+  </div>
+
+  <main>
+    <section class="view" id="view-overview">
+      <div class="section-heading">
+        <div><h2>月次レビュー</h2><p>到達の大きさと、反応の質を分けて判断します。</p></div>
+        <span class="badge" id="statusBadge"></span>
+      </div>
+      <div class="hero">
+        <article class="direction-card">
+          <p class="label">Next month focus</p>
+          <h2 id="direction"></h2>
+          <p class="reason" id="directionReason"></p>
+        </article>
+        <article class="target-card">
+          <p class="label">Guardrails</p>
+          <h3>次月の数値目標</h3>
+          <div class="target-list" id="targetList"></div>
+        </article>
+      </div>
+      <div class="kpi-grid" id="kpiGrid"></div>
+      <div class="two-col">
+        <article class="panel">
+          <div class="panel-header"><h3>月次リーチ推移</h3><span class="panel-note">日平均 / 中央値</span></div>
+          <div class="chart" id="reachChart"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-header"><h3>反応品質の推移</h3><span class="panel-note">ENG / 保存 / 集客</span></div>
+          <div class="chart" id="qualityChart"></div>
+        </article>
+      </div>
+      <div class="action-grid">
+        <article class="panel"><div class="panel-header"><h3>次月の実行項目</h3></div><div class="action-list" id="actionList"></div></article>
+        <article class="panel"><div class="panel-header"><h3>運用判断</h3></div><div class="stop-keep" id="stopKeep"></div></article>
+      </div>
+    </section>
+
+    <section class="view" id="view-trends" hidden>
+      <div class="section-heading"><div><h2>月次トレンド</h2><p>未完了月を含む全履歴です。確定分析は完全月を優先します。</p></div></div>
+      <article class="panel"><div class="table-wrap"><table id="monthlyTable"></table></div></article>
+    </section>
+
+    <section class="view" id="view-weekday" hidden>
+      <div class="section-heading"><div><h2>曜日別パフォーマンス</h2><p>選択月の日平均到達と品質率を比較します。</p></div></div>
+      <div class="weekday-layout">
+        <article class="panel"><div class="panel-header"><h3>日平均インプレッション</h3></div><div class="bars" id="weekdayBars"></div></article>
+        <article class="panel"><div class="table-wrap"><table id="weekdayTable"></table></div></article>
+      </div>
+    </section>
+
+    <section class="view" id="view-days" hidden>
+      <div class="section-heading">
+        <div><h2>ベスト / ワースト日</h2><p>単日ランキングは仮説発見用です。投稿内容の勝因は日別概要だけでは断定しません。</p></div>
+        <div class="toolbar"><button class="ghost-button" id="downloadCsv">選択月CSVを保存</button><button class="ghost-button" onclick="window.print()">印刷</button></div>
+      </div>
+      <div class="rank-grid"><article class="rank-card"><div class="rank-title best">BEST DAYS</div><div class="rank-list" id="topDays"></div></article><article class="rank-card"><div class="rank-title worst">BOTTOM DAYS</div><div class="rank-list" id="bottomDays"></div></article></div>
+      <article class="panel"><div class="panel-header"><h3>選択月の日別データ</h3></div><div class="table-wrap"><table id="dailyTable"></table></div></article>
+    </section>
+
+    <section class="view" id="view-weekly" hidden>
+      <div class="section-heading">
+        <div>
+          <h2>週次X記事</h2>
+          <p>公開指標と手元検証から、今週書く記事を割り当てます。日別概要だけではテーマを断定しません。</p>
+        </div>
+        <span class="badge" id="weeklyBadge"></span>
+      </div>
+      <div class="empty" id="weeklyEmpty">週次ブリーフがまだありません。</div>
+      <div id="weeklyBody" hidden>
+        <div class="hero">
+          <article class="direction-card">
+            <p class="label">This week</p>
+            <h2 id="weeklyPolicy"></h2>
+            <p class="reason" id="weeklySource"></p>
+          </article>
+          <article class="target-card">
+            <p class="label">Winning patterns</p>
+            <h3>記事に使う3枠</h3>
+            <div class="target-list" id="weeklyPatterns"></div>
+          </article>
+        </div>
+        <article class="panel" style="margin-bottom:22px">
+          <div class="panel-header"><h3>直近記事の実績</h3><span class="panel-note">公開の閲覧・いいね・保存</span></div>
+          <div class="table-wrap"><table id="weeklyArticleTable"></table></div>
+        </article>
+        <div class="pattern-grid" id="weeklyPatternCards"></div>
+        <article class="panel">
+          <div class="panel-header"><h3>今週の7本</h3><span class="panel-note" id="weeklyRange"></span></div>
+          <div class="plan-list" id="weeklyPlan"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="view" id="view-rules" hidden>
+      <div class="section-heading"><div><h2>指標と判定ルール</h2><p>同じデータから同じ結論を出すための固定仕様です。</p></div></div>
+      <div class="rules-grid" id="rulesGrid"></div>
+      <article class="panel" style="margin-top:18px">
+        <div class="panel-header"><h3>データ上の限界</h3></div>
+        <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.8">このCSVは日別のアカウント概要です。投稿本文・テーマ・投稿時刻が含まれないため、「どの内容が伸びたか」は断定しません。記事テーマの判定は Weekly Articles に埋め込んだ公開指標と週次ブリーフだけを使います。</p>
+      </article>
+    </section>
+  </main>
+
+  <script id="x-dashboard-data" type="application/json">{"version":2,"accountName":"むく","rows":[{"Date":"2026-04-18","インプレッション数":5507,"いいね":20,"エンゲージメント":36,"ブックマーク":1,"共有された回数":0,"新しいフォロー":0,"フォロー解除":1,"返信":0,"リポスト":5,"プロフィールへのアクセス数":10,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-19","インプレッション数":3202,"いいね":13,"エンゲージメント":21,"ブックマーク":0,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":2,"プロフィールへのアクセス数":5,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-20","インプレッション数":1627,"いいね":10,"エンゲージメント":21,"ブックマーク":2,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":2,"プロフィールへのアクセス数":6,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-21","インプレッション数":1806,"いいね":17,"エンゲージメント":27,"ブックマーク":1,"共有された回数":0,"新しいフォロー":1,"フォロー解除":2,"返信":2,"リポスト":3,"プロフィールへのアクセス数":4,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-22","インプレッション数":2513,"いいね":17,"エンゲージメント":37,"ブックマーク":6,"共有された回数":0,"新しいフォロー":1,"フォロー解除":1,"返信":4,"リポスト":7,"プロフィールへのアクセス数":3,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-23","インプレッション数":2794,"いいね":15,"エンゲージメント":24,"ブックマーク":1,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":4,"プロフィールへのアクセス数":3,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-24","インプレッション数":4299,"いいね":32,"エンゲージメント":59,"ブックマーク":13,"共有された回数":0,"新しいフォロー":0,"フォロー解除":0,"返信":0,"リポスト":7,"プロフィールへのアクセス数":7,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-25","インプレッション数":5148,"いいね":40,"エンゲージメント":63,"ブックマーク":7,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":3,"リポスト":8,"プロフィールへのアクセス数":5,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-26","インプレッション数":6522,"いいね":36,"エンゲージメント":67,"ブックマーク":8,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":12,"プロフィールへのアクセス数":10,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-27","インプレッション数":5252,"いいね":32,"エンゲージメント":72,"ブックマーク":14,"共有された回数":0,"新しいフォロー":4,"フォロー解除":1,"返信":3,"リポスト":14,"プロフィールへのアクセス数":9,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-28","インプレッション数":3843,"いいね":22,"エンゲージメント":51,"ブックマーク":3,"共有された回数":0,"新しいフォロー":1,"フォロー解除":2,"返信":3,"リポスト":8,"プロフィールへのアクセス数":15,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-29","インプレッション数":6816,"いいね":48,"エンゲージメント":98,"ブックマーク":12,"共有された回数":0,"新しいフォロー":0,"フォロー解除":0,"返信":5,"リポスト":14,"プロフィールへのアクセス数":19,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-30","インプレッション数":28702,"いいね":176,"エンゲージメント":463,"ブックマーク":153,"共有された回数":13,"新しいフォロー":31,"フォロー解除":0,"返信":4,"リポスト":27,"プロフィールへのアクセス数":90,"ポストを作成":3,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-01","インプレッション数":24147,"いいね":95,"エンゲージメント":239,"ブックマーク":72,"共有された回数":8,"新しいフォロー":17,"フォロー解除":2,"返信":9,"リポスト":13,"プロフィールへのアクセス数":42,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-02","インプレッション数":17141,"いいね":57,"エンゲージメント":167,"ブックマーク":17,"共有された回数":7,"新しいフォロー":3,"フォロー解除":1,"返信":3,"リポスト":31,"プロフィールへのアクセス数":52,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-03","インプレッション数":77993,"いいね":439,"エンゲージメント":1444,"ブックマーク":591,"共有された回数":47,"新しいフォロー":111,"フォロー解除":2,"返信":10,"リポスト":48,"プロフィールへのアクセス数":309,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-04","インプレッション数":30657,"いいね":160,"エンゲージメント":398,"ブックマーク":114,"共有された回数":12,"新しいフォロー":31,"フォロー解除":1,"返信":10,"リポスト":25,"プロフィールへのアクセス数":77,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-05","インプレッション数":22838,"いいね":126,"エンゲージメント":329,"ブックマーク":90,"共有された回数":20,"新しいフォロー":26,"フォロー解除":2,"返信":8,"リポスト":36,"プロフィールへのアクセス数":49,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-06","インプレッション数":81782,"いいね":355,"エンゲージメント":1033,"ブックマーク":354,"共有された回数":33,"新しいフォロー":63,"フォロー解除":4,"返信":24,"リポスト":53,"プロフィールへのアクセス数":214,"ポストを作成":3,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-07","インプレッション数":79320,"いいね":189,"エンゲージメント":627,"ブックマーク":221,"共有された回数":23,"新しいフォロー":41,"フォロー解除":7,"返信":16,"リポスト":42,"プロフィールへのアクセス数":136,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-08","インプレッション数":44771,"いいね":140,"エンゲージメント":386,"ブックマーク":89,"共有された回数":10,"新しいフォロー":18,"フォロー解除":1,"返信":20,"リポスト":26,"プロフィールへのアクセス数":101,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-09","インプレッション数":80257,"いいね":347,"エンゲージメント":826,"ブックマーク":248,"共有された回数":20,"新しいフォロー":60,"フォロー解除":4,"返信":20,"リポスト":40,"プロフィールへのアクセス数":151,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-10","インプレッション数":40134,"いいね":237,"エンゲージメント":542,"ブックマーク":119,"共有された回数":12,"新しいフォロー":28,"フォロー解除":7,"返信":16,"リポスト":45,"プロフィールへのアクセス数":113,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-11","インプレッション数":20208,"いいね":147,"エンゲージメント":307,"ブックマーク":46,"共有された回数":2,"新しいフォロー":16,"フォロー解除":2,"返信":16,"リポスト":38,"プロフィールへのアクセス数":58,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-12","インプレッション数":22772,"いいね":149,"エンゲージメント":312,"ブックマーク":44,"共有された回数":2,"新しいフォロー":11,"フォロー解除":4,"返信":26,"リポスト":35,"プロフィールへのアクセス数":56,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-13","インプレッション数":25142,"いいね":145,"エンゲージメント":302,"ブックマーク":64,"共有された回数":9,"新しいフォロー":5,"フォロー解除":2,"返信":14,"リポスト":27,"プロフィールへのアクセス数":43,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-14","インプレッション数":16675,"いいね":88,"エンゲージメント":181,"ブックマーク":30,"共有された回数":2,"新しいフォロー":7,"フォロー解除":1,"返信":16,"リポスト":21,"プロフィールへのアクセス数":24,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-15","インプレッション数":44612,"いいね":150,"エンゲージメント":365,"ブックマーク":94,"共有された回数":12,"新しいフォロー":19,"フォロー解除":2,"返信":15,"リポスト":18,"プロフィールへのアクセス数":76,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-16","インプレッション数":24266,"いいね":89,"エンゲージメント":214,"ブックマーク":36,"共有された回数":8,"新しいフォロー":8,"フォロー解除":5,"返信":9,"リポスト":30,"プロフィールへのアクセス数":42,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-17","インプレッション数":12584,"いいね":95,"エンゲージメント":184,"ブックマーク":15,"共有された回数":0,"新しいフォロー":5,"フォロー解除":4,"返信":16,"リポスト":18,"プロフィールへのアクセス数":40,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-18","インプレッション数":11848,"いいね":69,"エンゲージメント":153,"ブックマーク":20,"共有された回数":2,"新しいフォロー":6,"フォロー解除":3,"返信":11,"リポスト":18,"プロフィールへのアクセス数":33,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-19","インプレッション数":12950,"いいね":91,"エンゲージメント":190,"ブックマーク":20,"共有された回数":2,"新しいフォロー":10,"フォロー解除":1,"返信":16,"リポスト":14,"プロフィールへのアクセス数":47,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-20","インプレッション数":19694,"いいね":116,"エンゲージメント":235,"ブックマーク":35,"共有された回数":0,"新しいフォロー":15,"フォロー解除":1,"返信":13,"リポスト":23,"プロフィールへのアクセス数":48,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-21","インプレッション数":16441,"いいね":81,"エンゲージメント":156,"ブックマーク":21,"共有された回数":3,"新しいフォロー":2,"フォロー解除":2,"返信":15,"リポスト":7,"プロフィールへのアクセス数":29,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-22","インプレッション数":8172,"いいね":40,"エンゲージメント":102,"ブックマーク":5,"共有された回数":0,"新しいフォロー":1,"フォロー解除":2,"返信":14,"リポスト":7,"プロフィールへのアクセス数":36,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-23","インプレッション数":7020,"いいね":30,"エンゲージメント":67,"ブックマーク":1,"共有された回数":1,"新しいフォロー":2,"フォロー解除":2,"返信":4,"リポスト":12,"プロフィールへのアクセス数":19,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-24","インプレッション数":6021,"いいね":66,"エンゲージメント":121,"ブックマーク":5,"共有された回数":0,"新しいフォロー":2,"フォロー解除":4,"返信":14,"リポスト":16,"プロフィールへのアクセス数":20,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-25","インプレッション数":19537,"いいね":66,"エンゲージメント":137,"ブックマーク":9,"共有された回数":0,"新しいフォロー":4,"フォロー解除":1,"返信":12,"リポスト":14,"プロフィールへのアクセス数":36,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-26","インプレッション数":14956,"いいね":62,"エンゲージメント":135,"ブックマーク":13,"共有された回数":3,"新しいフォロー":1,"フォロー解除":2,"返信":12,"リポスト":16,"プロフィールへのアクセス数":29,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-27","インプレッション数":20136,"いいね":114,"エンゲージメント":255,"ブックマーク":43,"共有された回数":4,"新しいフォロー":8,"フォロー解除":2,"返信":15,"リポスト":18,"プロフィールへのアクセス数":61,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-28","インプレッション数":27216,"いいね":125,"エンゲージメント":337,"ブックマーク":100,"共有された回数":10,"新しいフォロー":25,"フォロー解除":4,"返信":11,"リポスト":21,"プロフィールへのアクセス数":70,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-29","インプレッション数":26643,"いいね":125,"エンゲージメント":292,"ブックマーク":84,"共有された回数":18,"新しいフォロー":12,"フォロー解除":4,"返信":12,"リポスト":17,"プロフィールへのアクセス数":36,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-30","インプレッション数":66526,"いいね":209,"エンゲージメント":558,"ブックマーク":143,"共有された回数":4,"新しいフォロー":30,"フォロー解除":4,"返信":18,"リポスト":40,"プロフィールへのアクセス数":144,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-31","インプレッション数":55821,"いいね":289,"エンゲージメント":737,"ブックマーク":167,"共有された回数":10,"新しいフォロー":42,"フォロー解除":2,"返信":21,"リポスト":64,"プロフィールへのアクセス数":186,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-01","インプレッション数":35017,"いいね":88,"エンゲージメント":241,"ブックマーク":37,"共有された回数":10,"新しいフォロー":20,"フォロー解除":4,"返信":10,"リポスト":19,"プロフィールへのアクセス数":77,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-02","インプレッション数":20332,"いいね":83,"エンゲージメント":181,"ブックマーク":17,"共有された回数":0,"新しいフォロー":4,"フォロー解除":2,"返信":10,"リポスト":29,"プロフィールへのアクセス数":42,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-03","インプレッション数":16624,"いいね":42,"エンゲージメント":93,"ブックマーク":15,"共有された回数":1,"新しいフォロー":5,"フォロー解除":2,"返信":7,"リポスト":7,"プロフィールへのアクセス数":21,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-04","インプレッション数":129230,"いいね":331,"エンゲージメント":1202,"ブックマーク":372,"共有された回数":39,"新しいフォロー":105,"フォロー解除":3,"返信":19,"リポスト":26,"プロフィールへのアクセス数":415,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-05","インプレッション数":45830,"いいね":185,"エンゲージメント":514,"ブックマーク":168,"共有された回数":18,"新しいフォロー":35,"フォロー解除":3,"返信":15,"リポスト":17,"プロフィールへのアクセス数":111,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-06","インプレッション数":164732,"いいね":515,"エンゲージメント":1874,"ブックマーク":540,"共有された回数":35,"新しいフォロー":73,"フォロー解除":7,"返信":29,"リポスト":67,"プロフィールへのアクセス数":688,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-07","インプレッション数":38343,"いいね":149,"エンゲージメント":354,"ブックマーク":57,"共有された回数":13,"新しいフォロー":38,"フォロー解除":4,"返信":22,"リポスト":22,"プロフィールへのアクセス数":91,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-08","インプレッション数":87365,"いいね":435,"エンゲージメント":1575,"ブックマーク":687,"共有された回数":55,"新しいフォロー":136,"フォロー解除":4,"返信":15,"リポスト":39,"プロフィールへのアクセス数":344,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-09","インプレッション数":30053,"いいね":128,"エンゲージメント":340,"ブックマーク":65,"共有された回数":10,"新しいフォロー":22,"フォロー解除":12,"返信":21,"リポスト":18,"プロフィールへのアクセス数":98,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-10","インプレッション数":31236,"いいね":83,"エンゲージメント":221,"ブックマーク":38,"共有された回数":5,"新しいフォロー":16,"フォロー解除":3,"返信":15,"リポスト":17,"プロフィールへのアクセス数":63,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-11","インプレッション数":26489,"いいね":74,"エンゲージメント":190,"ブックマーク":45,"共有された回数":16,"新しいフォロー":23,"フォロー解除":2,"返信":3,"リポスト":11,"プロフィールへのアクセス数":41,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-12","インプレッション数":37269,"いいね":135,"エンゲージメント":335,"ブックマーク":80,"共有された回数":10,"新しいフォロー":16,"フォロー解除":1,"返信":13,"リポスト":33,"プロフィールへのアクセス数":64,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-13","インプレッション数":20610,"いいね":68,"エンゲージメント":176,"ブックマーク":34,"共有された回数":4,"新しいフォロー":6,"フォロー解除":2,"返信":11,"リポスト":14,"プロフィールへのアクセス数":45,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-14","インプレッション数":38865,"いいね":165,"エンゲージメント":355,"ブックマーク":64,"共有された回数":7,"新しいフォロー":12,"フォロー解除":3,"返信":19,"リポスト":23,"プロフィールへのアクセス数":77,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-15","インプレッション数":21591,"いいね":119,"エンゲージメント":279,"ブックマーク":58,"共有された回数":8,"新しいフォロー":10,"フォロー解除":4,"返信":18,"リポスト":21,"プロフィールへのアクセス数":55,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-16","インプレッション数":52177,"いいね":174,"エンゲージメント":546,"ブックマーク":214,"共有された回数":24,"新しいフォロー":45,"フォロー解除":2,"返信":13,"リポスト":19,"プロフィールへのアクセス数":102,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-17","インプレッション数":24705,"いいね":112,"エンゲージメント":263,"ブックマーク":61,"共有された回数":7,"新しいフォロー":7,"フォロー解除":0,"返信":13,"リポスト":20,"プロフィールへのアクセス数":50,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-18","インプレッション数":44245,"いいね":111,"エンゲージメント":330,"ブックマーク":109,"共有された回数":9,"新しいフォロー":11,"フォロー解除":5,"返信":12,"リポスト":17,"プロフィールへのアクセス数":72,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-19","インプレッション数":17226,"いいね":61,"エンゲージメント":133,"ブックマーク":25,"共有された回数":2,"新しいフォロー":6,"フォロー解除":2,"返信":13,"リポスト":14,"プロフィールへのアクセス数":18,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-20","インプレッション数":17702,"いいね":140,"エンゲージメント":269,"ブックマーク":35,"共有された回数":5,"新しいフォロー":10,"フォロー解除":2,"返信":23,"リポスト":30,"プロフィールへのアクセス数":36,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-21","インプレッション数":28197,"いいね":104,"エンゲージメント":247,"ブックマーク":41,"共有された回数":4,"新しいフォロー":5,"フォロー解除":12,"返信":14,"リポスト":30,"プロフィールへのアクセス数":54,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-22","インプレッション数":13565,"いいね":51,"エンゲージメント":104,"ブックマーク":17,"共有された回数":1,"新しいフォロー":7,"フォロー解除":4,"返信":3,"リポスト":8,"プロフィールへのアクセス数":24,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-23","インプレッション数":16627,"いいね":76,"エンゲージメント":175,"ブックマーク":34,"共有された回数":2,"新しいフォロー":8,"フォロー解除":1,"返信":19,"リポスト":18,"プロフィールへのアクセス数":26,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-24","インプレッション数":18473,"いいね":95,"エンゲージメント":211,"ブックマーク":39,"共有された回数":4,"新しいフォロー":18,"フォロー解除":3,"返信":12,"リポスト":15,"プロフィールへのアクセス数":46,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-25","インプレッション数":127592,"いいね":324,"エンゲージメント":868,"ブックマーク":305,"共有された回数":27,"新しいフォロー":50,"フォロー解除":1,"返信":23,"リポスト":38,"プロフィールへのアクセス数":151,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-26","インプレッション数":21677,"いいね":79,"エンゲージメント":191,"ブックマーク":31,"共有された回数":3,"新しいフォロー":9,"フォロー解除":1,"返信":24,"リポスト":16,"プロフィールへのアクセス数":38,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-27","インプレッション数":11140,"いいね":81,"エンゲージメント":164,"ブックマーク":10,"共有された回数":3,"新しいフォロー":3,"フォロー解除":3,"返信":16,"リポスト":21,"プロフィールへのアクセス数":33,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-28","インプレッション数":19939,"いいね":118,"エンゲージメント":253,"ブックマーク":29,"共有された回数":3,"新しいフォロー":10,"フォロー解除":1,"返信":29,"リポスト":32,"プロフィールへのアクセス数":42,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-29","インプレッション数":19560,"いいね":94,"エンゲージメント":189,"ブックマーク":13,"共有された回数":2,"新しいフォロー":3,"フォロー解除":1,"返信":16,"リポスト":28,"プロフィールへのアクセス数":36,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-30","インプレッション数":20690,"いいね":89,"エンゲージメント":202,"ブックマーク":28,"共有された回数":2,"新しいフォロー":10,"フォロー解除":2,"返信":10,"リポスト":20,"プロフィールへのアクセス数":53,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-01","インプレッション数":11399,"いいね":71,"エンゲージメント":146,"ブックマーク":7,"共有された回数":0,"新しいフォロー":9,"フォロー解除":8,"返信":16,"リポスト":14,"プロフィールへのアクセス数":38,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-02","インプレッション数":8053,"いいね":49,"エンゲージメント":86,"ブックマーク":1,"共有された回数":0,"新しいフォロー":5,"フォロー解除":4,"返信":12,"リポスト":6,"プロフィールへのアクセス数":18,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-03","インプレッション数":11527,"いいね":64,"エンゲージメント":128,"ブックマーク":11,"共有された回数":1,"新しいフォロー":4,"フォロー解除":5,"返信":9,"リポスト":16,"プロフィールへのアクセス数":27,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-04","インプレッション数":5702,"いいね":30,"エンゲージメント":61,"ブックマーク":4,"共有された回数":1,"新しいフォロー":1,"フォロー解除":6,"返信":4,"リポスト":9,"プロフィールへのアクセス数":13,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-05","インプレッション数":7519,"いいね":51,"エンゲージメント":107,"ブックマーク":6,"共有された回数":0,"新しいフォロー":3,"フォロー解除":2,"返信":14,"リポスト":12,"プロフィールへのアクセス数":24,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-06","インプレッション数":57201,"いいね":121,"エンゲージメント":337,"ブックマーク":132,"共有された回数":5,"新しいフォロー":13,"フォロー解除":6,"返信":16,"リポスト":16,"プロフィールへのアクセス数":47,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-07","インプレッション数":119120,"いいね":217,"エンゲージメント":581,"ブックマーク":200,"共有された回数":12,"新しいフォロー":19,"フォロー解除":3,"返信":22,"リポスト":24,"プロフィールへのアクセス数":106,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-08","インプレッション数":18575,"いいね":78,"エンゲージメント":176,"ブックマーク":31,"共有された回数":5,"新しいフォロー":6,"フォロー解除":0,"返信":7,"リポスト":15,"プロフィールへのアクセス数":40,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-09","インプレッション数":15135,"いいね":65,"エンゲージメント":146,"ブックマーク":30,"共有された回数":0,"新しいフォロー":5,"フォロー解除":2,"返信":17,"リポスト":10,"プロフィールへのアクセス数":24,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-10","インプレッション数":250062,"いいね":505,"エンゲージメント":1427,"ブックマーク":644,"共有された回数":42,"新しいフォロー":88,"フォロー解除":4,"返信":12,"リポスト":60,"プロフィールへのアクセス数":164,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-11","インプレッション数":362823,"いいね":679,"エンゲージメント":1993,"ブックマーク":872,"共有された回数":83,"新しいフォロー":122,"フォロー解除":6,"返信":39,"リポスト":67,"プロフィールへのアクセス数":253,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-12","インプレッション数":187356,"いいね":778,"エンゲージメント":1882,"ブックマーク":627,"共有された回数":31,"新しいフォロー":82,"フォロー解除":5,"返信":37,"リポスト":94,"プロフィールへのアクセス数":315,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-13","インプレッション数":91082,"いいね":240,"エンゲージメント":592,"ブックマーク":185,"共有された回数":18,"新しいフォロー":32,"フォロー解除":2,"返信":27,"リポスト":34,"プロフィールへのアクセス数":88,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-14","インプレッション数":20250,"いいね":74,"エンゲージメント":177,"ブックマーク":28,"共有された回数":0,"新しいフォロー":13,"フォロー解除":0,"返信":15,"リポスト":19,"プロフィールへのアクセス数":41,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-15","インプレッション数":16907,"いいね":86,"エンゲージメント":197,"ブックマーク":40,"共有された回数":7,"新しいフォロー":6,"フォロー解除":3,"返信":16,"リポスト":18,"プロフィールへのアクセス数":30,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-16","インプレッション数":19210,"いいね":56,"エンゲージメント":168,"ブックマーク":57,"共有された回数":6,"新しいフォロー":6,"フォロー解除":0,"返信":15,"リポスト":10,"プロフィールへのアクセス数":24,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0}],"months":[{"month":"2026-04","coverage":0.43333333333333335,"days":13,"complete":false,"impressions":78031,"avgDailyImpressions":6002.384615384615,"medianDailyImpressions":4299,"posts":11,"impressionsPerPost":7093.727272727273,"engagement":1039,"engagementRate":0.013315220873755302,"likes":478,"bookmarks":221,"saveRate":0.0028322077123194627,"reposts":113,"repostRate":0.0014481424049416257,"replies":28,"replyRate":0.000358831746357217,"shares":13,"shareRate":0.00016660045366585075,"profileVisits":186,"newFollowers":43,"unfollows":7,"netFollowers":36,"acquisitionRate":0.002934731068421525,"followConversion":0.23118279569892472,"top1Share":0.36782817085517294,"top3Share":0.5387602363163358,"rowDates":["2026-04-18","2026-04-19","2026-04-20","2026-04-21","2026-04-22","2026-04-23","2026-04-24","2026-04-25","2026-04-26","2026-04-27","2026-04-28","2026-04-29","2026-04-30"],"previousMonth":null,"changes":{"avgDailyImpressions":null,"medianDailyImpressions":null,"engagementRate":null,"saveRate":null,"repostRate":null,"acquisitionRate":null,"netFollowers":null,"top1Share":null},"strategy":{"direction":"計測基盤を整え、1か月の基準値をつくる","reason":"比較可能な前月データがないため、まず日次の安定値と反応率の基準を確立します。","actions":["CSVを欠損なく蓄積する","保存・拡散・集客の基準値を把握する","高到達日と通常日の差を記録する"],"stop":"単日のバズだけで成功・失敗を判断すること","keep":"日次データを同じ定義で蓄積すること"},"targets":{"dailyImpressionsFloor":4900,"saveRate":0.0028322077123194627,"acquisitionRate":0.002934731068421525,"netFollowers":38,"top1Share":0.26782817085517296},"weekdays":[{"weekday":"月曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":6879,"avgDailyImpressions":3439.5,"medianDailyImpressions":3439.5,"posts":2,"impressionsPerPost":3439.5,"engagement":93,"engagementRate":0.013519406890536415,"likes":42,"bookmarks":16,"saveRate":0.002325919465038523,"reposts":16,"repostRate":0.002325919465038523,"replies":4,"replyRate":0.0005814798662596307,"shares":0,"shareRate":0,"profileVisits":15,"newFollowers":5,"unfollows":1,"netFollowers":4,"acquisitionRate":0.0029073993312981536,"followConversion":0.3333333333333333,"top1Share":0.7634830643988952,"top3Share":1},{"weekday":"火曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":5649,"avgDailyImpressions":2824.5,"medianDailyImpressions":2824.5,"posts":1,"impressionsPerPost":5649,"engagement":78,"engagementRate":0.013807753584705257,"likes":39,"bookmarks":4,"saveRate":0.0007080899274207824,"reposts":11,"repostRate":0.0019472473004071517,"replies":5,"replyRate":0.0008851124092759781,"shares":0,"shareRate":0,"profileVisits":19,"newFollowers":2,"unfollows":4,"netFollowers":-2,"acquisitionRate":0.0037174721189591076,"followConversion":0.10526315789473684,"top1Share":0.6802973977695167,"top3Share":1},{"weekday":"水曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":9329,"avgDailyImpressions":4664.5,"medianDailyImpressions":4664.5,"posts":0,"impressionsPerPost":0,"engagement":135,"engagementRate":0.014471004394897631,"likes":65,"bookmarks":18,"saveRate":0.0019294672526530175,"reposts":21,"repostRate":0.002251045128095187,"replies":9,"replyRate":0.0009647336263265087,"shares":0,"shareRate":0,"profileVisits":22,"newFollowers":1,"unfollows":1,"netFollowers":0,"acquisitionRate":0.0024654303783899667,"followConversion":0.045454545454545456,"top1Share":0.7306249330046093,"top3Share":1},{"weekday":"木曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":31496,"avgDailyImpressions":15748,"medianDailyImpressions":15748,"posts":4,"impressionsPerPost":7874,"engagement":487,"engagementRate":0.015462280924561849,"likes":191,"bookmarks":154,"saveRate":0.004889509779019558,"reposts":31,"repostRate":0.000984251968503937,"replies":5,"replyRate":0.000158750317500635,"shares":13,"shareRate":0.000412750825501651,"profileVisits":93,"newFollowers":32,"unfollows":0,"netFollowers":32,"acquisitionRate":0.003968757937515875,"followConversion":0.34408602150537637,"top1Share":0.9112903225806451,"top3Share":1},{"weekday":"金曜","month":"2000-01","coverage":0.03225806451612903,"days":1,"complete":false,"impressions":4299,"avgDailyImpressions":4299,"medianDailyImpressions":4299,"posts":1,"impressionsPerPost":4299,"engagement":59,"engagementRate":0.013724121888811351,"likes":32,"bookmarks":13,"saveRate":0.003023959060246569,"reposts":7,"repostRate":0.0016282856478250756,"replies":0,"replyRate":0,"shares":0,"shareRate":0,"profileVisits":7,"newFollowers":0,"unfollows":0,"netFollowers":0,"acquisitionRate":0.0016282856478250756,"followConversion":0,"top1Share":1,"top3Share":1},{"weekday":"土曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":10655,"avgDailyImpressions":5327.5,"medianDailyImpressions":5327.5,"posts":1,"impressionsPerPost":10655,"engagement":99,"engagementRate":0.009291412482402627,"likes":60,"bookmarks":8,"saveRate":0.0007508212106992023,"reposts":13,"repostRate":0.0012200844673862037,"replies":3,"replyRate":0.0002815579540122008,"shares":0,"shareRate":0,"profileVisits":15,"newFollowers":1,"unfollows":1,"netFollowers":0,"acquisitionRate":0.0015016424213984045,"followConversion":0.06666666666666667,"top1Share":0.5168465509150634,"top3Share":1},{"weekday":"日曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":9724,"avgDailyImpressions":4862,"medianDailyImpressions":4862,"posts":2,"impressionsPerPost":4862,"engagement":88,"engagementRate":0.00904977375565611,"likes":49,"bookmarks":8,"saveRate":0.0008227067050596463,"reposts":14,"repostRate":0.001439736733854381,"replies":2,"replyRate":0.00020567667626491157,"shares":0,"shareRate":0,"profileVisits":15,"newFollowers":2,"unfollows":0,"netFollowers":2,"acquisitionRate":0.0017482517482517483,"followConversion":0.13333333333333333,"top1Share":0.6707116412998766,"top3Share":1}],"topDays":[{"Date":"2026-04-30","インプレッション数":28702,"いいね":176,"エンゲージメント":463,"ブックマーク":153,"共有された回数":13,"新しいフォロー":31,"フォロー解除":0,"返信":4,"リポスト":27,"プロフィールへのアクセス数":90,"ポストを作成":3,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-29","インプレッション数":6816,"いいね":48,"エンゲージメント":98,"ブックマーク":12,"共有された回数":0,"新しいフォロー":0,"フォロー解除":0,"返信":5,"リポスト":14,"プロフィールへのアクセス数":19,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-26","インプレッション数":6522,"いいね":36,"エンゲージメント":67,"ブックマーク":8,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":12,"プロフィールへのアクセス数":10,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-18","インプレッション数":5507,"いいね":20,"エンゲージメント":36,"ブックマーク":1,"共有された回数":0,"新しいフォロー":0,"フォロー解除":1,"返信":0,"リポスト":5,"プロフィールへのアクセス数":10,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-27","インプレッション数":5252,"いいね":32,"エンゲージメント":72,"ブックマーク":14,"共有された回数":0,"新しいフォロー":4,"フォロー解除":1,"返信":3,"リポスト":14,"プロフィールへのアクセス数":9,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0}],"bottomDays":[{"Date":"2026-04-20","インプレッション数":1627,"いいね":10,"エンゲージメント":21,"ブックマーク":2,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":2,"プロフィールへのアクセス数":6,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-21","インプレッション数":1806,"いいね":17,"エンゲージメント":27,"ブックマーク":1,"共有された回数":0,"新しいフォロー":1,"フォロー解除":2,"返信":2,"リポスト":3,"プロフィールへのアクセス数":4,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-22","インプレッション数":2513,"いいね":17,"エンゲージメント":37,"ブックマーク":6,"共有された回数":0,"新しいフォロー":1,"フォロー解除":1,"返信":4,"リポスト":7,"プロフィールへのアクセス数":3,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-23","インプレッション数":2794,"いいね":15,"エンゲージメント":24,"ブックマーク":1,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":4,"プロフィールへのアクセス数":3,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-04-19","インプレッション数":3202,"いいね":13,"エンゲージメント":21,"ブックマーク":0,"共有された回数":0,"新しいフォロー":1,"フォロー解除":0,"返信":1,"リポスト":2,"プロフィールへのアクセス数":5,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0}]},{"month":"2026-05","coverage":1,"days":31,"complete":true,"impressions":978280,"avgDailyImpressions":31557.41935483871,"medianDailyImpressions":22838,"posts":29,"impressionsPerPost":33733.793103448275,"engagement":11331,"engagementRate":0.011582573496340516,"likes":4491,"bookmarks":2910,"saveRate":0.0029746084965449563,"reposts":833,"repostRate":0.0008514944596638999,"replies":436,"replyRate":0.0004456801733654986,"shares":284,"shareRate":0.0002903054340270679,"profileVisits":2377,"newFollowers":629,"unfollows":85,"netFollowers":544,"acquisitionRate":0.0030727399108639655,"followConversion":0.26461926798485486,"top1Share":0.08359774297747066,"top3Share":0.24671770863147566,"rowDates":["2026-05-01","2026-05-02","2026-05-03","2026-05-04","2026-05-05","2026-05-06","2026-05-07","2026-05-08","2026-05-09","2026-05-10","2026-05-11","2026-05-12","2026-05-13","2026-05-14","2026-05-15","2026-05-16","2026-05-17","2026-05-18","2026-05-19","2026-05-20","2026-05-21","2026-05-22","2026-05-23","2026-05-24","2026-05-25","2026-05-26","2026-05-27","2026-05-28","2026-05-29","2026-05-30","2026-05-31"],"previousMonth":"2026-04","changes":{"avgDailyImpressions":4.2574803810396284,"medianDailyImpressions":4.312398232147011,"engagementRate":-0.13012532002603772,"saveRate":0.05027907508551799,"repostRate":-0.41200916653067454,"acquisitionRate":0.04702606106823626,"netFollowers":14.11111111111111,"top1Share":-0.772726099844087},"strategy":{"direction":"安定成長を維持しながら、再現できる勝ちパターンを増やす","reason":"到達と反応率に大きな崩れがないため、再現性の高い運用へ移る段階です。","actions":["上位曜日・上位日の型を3回以上再検証する","日次中央値・保存率・集客率を週次確認する","改善施策は一度に1つだけ変える"],"stop":"同時に多くの条件を変えて学習不能にすること","keep":"総量と率の両方を追うこと"},"targets":{"dailyImpressionsFloor":26300,"saveRate":0.002825878071717708,"acquisitionRate":0.002919102915320767,"netFollowers":571,"top1Share":0.2},"weekdays":[{"weekday":"月曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":82250,"avgDailyImpressions":20562.5,"medianDailyImpressions":19872.5,"posts":4,"impressionsPerPost":20562.5,"engagement":995,"engagementRate":0.01209726443768997,"likes":442,"bookmarks":189,"saveRate":0.002297872340425532,"reposts":95,"repostRate":0.001155015197568389,"replies":49,"replyRate":0.0005957446808510638,"shares":16,"shareRate":0.0001945288753799392,"profileVisits":204,"newFollowers":57,"unfollows":7,"netFollowers":50,"acquisitionRate":0.003173252279635258,"followConversion":0.27941176470588236,"top1Share":0.37272948328267475,"top3Share":0.855951367781155},{"weekday":"火曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":73516,"avgDailyImpressions":18379,"medianDailyImpressions":18864,"posts":4,"impressionsPerPost":18379,"engagement":966,"engagementRate":0.013139996735404539,"likes":428,"bookmarks":167,"saveRate":0.002271614342456064,"reposts":101,"repostRate":0.0013738505903476794,"replies":62,"replyRate":0.0008433538277381795,"shares":27,"shareRate":0.0003672669894988846,"profileVisits":181,"newFollowers":48,"unfollows":9,"netFollowers":39,"acquisitionRate":0.0031149681701942433,"followConversion":0.26519337016574585,"top1Share":0.3106534631916862,"top3Share":0.8238478698514609},{"weekday":"水曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":146754,"avgDailyImpressions":36688.5,"medianDailyImpressions":22639,"posts":5,"impressionsPerPost":29350.8,"engagement":1825,"engagementRate":0.012435776878313367,"likes":730,"bookmarks":496,"saveRate":0.0033798056611744824,"reposts":121,"repostRate":0.0008245090423429685,"replies":66,"replyRate":0.00044973220491434645,"shares":46,"shareRate":0.0003134497185766657,"profileVisits":366,"newFollowers":91,"unfollows":9,"netFollowers":82,"acquisitionRate":0.003114054812816005,"followConversion":0.24863387978142076,"top1Share":0.5572727148834103,"top3Share":0.8658026357032858},{"weekday":"木曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":139652,"avgDailyImpressions":34913,"medianDailyImpressions":21945.5,"posts":2,"impressionsPerPost":69826,"engagement":1301,"engagementRate":0.00931601409217197,"likes":483,"bookmarks":372,"saveRate":0.0026637642139031308,"reposts":91,"repostRate":0.0006516197404978089,"replies":58,"replyRate":0.0004153180763612408,"shares":38,"shareRate":0.0002721049465815026,"profileVisits":259,"newFollowers":75,"unfollows":14,"netFollowers":61,"acquisitionRate":0.002391659267321628,"followConversion":0.28957528957528955,"top1Share":0.5679832727064418,"top3Share":0.8822716466645663},{"weekday":"金曜","month":"2000-01","coverage":0.16129032258064516,"days":5,"complete":false,"impressions":148345,"avgDailyImpressions":29669,"medianDailyImpressions":26643,"posts":3,"impressionsPerPost":49448.333333333336,"engagement":1384,"engagementRate":0.009329603289628905,"likes":550,"bookmarks":344,"saveRate":0.002318918736728572,"reposts":81,"repostRate":0.0005460244699855068,"replies":70,"replyRate":0.00047187299875290706,"shares":48,"shareRate":0.0003235700562877077,"profileVisits":291,"newFollowers":67,"unfollows":11,"netFollowers":56,"acquisitionRate":0.0024132933364791535,"followConversion":0.23024054982817868,"top1Share":0.30180322895952005,"top3Share":0.7821362364757828},{"weekday":"土曜","month":"2000-01","coverage":0.16129032258064516,"days":5,"complete":false,"impressions":195210,"avgDailyImpressions":39042,"medianDailyImpressions":24266,"posts":3,"impressionsPerPost":65070,"engagement":1832,"engagementRate":0.009384765124737461,"likes":732,"bookmarks":445,"saveRate":0.002279596332155115,"reposts":153,"repostRate":0.0007837713231904104,"replies":54,"replyRate":0.00027662517289073305,"shares":40,"shareRate":0.0002049075354746171,"profileVisits":408,"newFollowers":103,"unfollows":16,"netFollowers":87,"acquisitionRate":0.0026176937656882332,"followConversion":0.25245098039215685,"top1Share":0.4111316018646586,"top3Share":0.8762307258849444},{"weekday":"日曜","month":"2000-01","coverage":0.16129032258064516,"days":5,"complete":false,"impressions":192553,"avgDailyImpressions":38510.6,"medianDailyImpressions":40134,"posts":8,"impressionsPerPost":24069.125,"engagement":3028,"engagementRate":0.015725540500537514,"likes":1126,"bookmarks":897,"saveRate":0.004658457671394369,"reposts":191,"repostRate":0.0009919346881118445,"replies":77,"replyRate":0.0003998899004429949,"shares":69,"shareRate":0.0003583428977995669,"profileVisits":668,"newFollowers":188,"unfollows":19,"netFollowers":169,"acquisitionRate":0.004445529282846801,"followConversion":0.281437125748503,"top1Share":0.40504692214611043,"top3Share":0.9033772519773776}],"topDays":[{"Date":"2026-05-06","インプレッション数":81782,"いいね":355,"エンゲージメント":1033,"ブックマーク":354,"共有された回数":33,"新しいフォロー":63,"フォロー解除":4,"返信":24,"リポスト":53,"プロフィールへのアクセス数":214,"ポストを作成":3,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-09","インプレッション数":80257,"いいね":347,"エンゲージメント":826,"ブックマーク":248,"共有された回数":20,"新しいフォロー":60,"フォロー解除":4,"返信":20,"リポスト":40,"プロフィールへのアクセス数":151,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-07","インプレッション数":79320,"いいね":189,"エンゲージメント":627,"ブックマーク":221,"共有された回数":23,"新しいフォロー":41,"フォロー解除":7,"返信":16,"リポスト":42,"プロフィールへのアクセス数":136,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-03","インプレッション数":77993,"いいね":439,"エンゲージメント":1444,"ブックマーク":591,"共有された回数":47,"新しいフォロー":111,"フォロー解除":2,"返信":10,"リポスト":48,"プロフィールへのアクセス数":309,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-30","インプレッション数":66526,"いいね":209,"エンゲージメント":558,"ブックマーク":143,"共有された回数":4,"新しいフォロー":30,"フォロー解除":4,"返信":18,"リポスト":40,"プロフィールへのアクセス数":144,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0}],"bottomDays":[{"Date":"2026-05-24","インプレッション数":6021,"いいね":66,"エンゲージメント":121,"ブックマーク":5,"共有された回数":0,"新しいフォロー":2,"フォロー解除":4,"返信":14,"リポスト":16,"プロフィールへのアクセス数":20,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-23","インプレッション数":7020,"いいね":30,"エンゲージメント":67,"ブックマーク":1,"共有された回数":1,"新しいフォロー":2,"フォロー解除":2,"返信":4,"リポスト":12,"プロフィールへのアクセス数":19,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-22","インプレッション数":8172,"いいね":40,"エンゲージメント":102,"ブックマーク":5,"共有された回数":0,"新しいフォロー":1,"フォロー解除":2,"返信":14,"リポスト":7,"プロフィールへのアクセス数":36,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-18","インプレッション数":11848,"いいね":69,"エンゲージメント":153,"ブックマーク":20,"共有された回数":2,"新しいフォロー":6,"フォロー解除":3,"返信":11,"リポスト":18,"プロフィールへのアクセス数":33,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-05-17","インプレッション数":12584,"いいね":95,"エンゲージメント":184,"ブックマーク":15,"共有された回数":0,"新しいフォロー":5,"フォロー解除":4,"返信":16,"リポスト":18,"プロフィールへのアクセス数":40,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0}]},{"month":"2026-06","coverage":1,"days":30,"complete":true,"impressions":1197101,"avgDailyImpressions":39903.36666666667,"medianDailyImpressions":25597,"posts":26,"impressionsPerPost":46042.346153846156,"engagement":12075,"engagementRate":0.01008686819240816,"likes":4309,"bookmarks":3268,"saveRate":0.0027299283853242126,"reposts":689,"repostRate":0.0005755571167345111,"replies":467,"replyRate":0.0003901091052467586,"shares":329,"shareRate":0.0002748306116192368,"profileVisits":3013,"newFollowers":723,"unfollows":96,"netFollowers":627,"acquisitionRate":0.003120872841974069,"followConversion":0.23996017258546298,"top1Share":0.13760910733513715,"top3Share":0.35214572538156763,"rowDates":["2026-06-01","2026-06-02","2026-06-03","2026-06-04","2026-06-05","2026-06-06","2026-06-07","2026-06-08","2026-06-09","2026-06-10","2026-06-11","2026-06-12","2026-06-13","2026-06-14","2026-06-15","2026-06-16","2026-06-17","2026-06-18","2026-06-19","2026-06-20","2026-06-21","2026-06-22","2026-06-23","2026-06-24","2026-06-25","2026-06-26","2026-06-27","2026-06-28","2026-06-29","2026-06-30"],"previousMonth":"2026-05","changes":{"avgDailyImpressions":0.26446862520614434,"medianDailyImpressions":0.12080742621945872,"engagementRate":-0.12913410861626917,"saveRate":-0.08225624027664236,"repostRate":-0.32406240557138344,"acquisitionRate":0.01566449895089539,"netFollowers":0.15257352941176472,"top1Share":0.646086394607835},"strategy":{"direction":"安定成長を維持しながら、再現できる勝ちパターンを増やす","reason":"到達と反応率に大きな崩れがないため、再現性の高い運用へ移る段階です。","actions":["上位曜日・上位日の型を3回以上再検証する","日次中央値・保存率・集客率を週次確認する","改善施策は一度に1つだけ変える"],"stop":"同時に多くの条件を変えて学習不能にすること","keep":"総量と率の両方を追うこと"},"targets":{"dailyImpressionsFloor":31600,"saveRate":0.0028522684409345847,"acquisitionRate":0.0029648291998753654,"netFollowers":658,"top1Share":0.2},"weekdays":[{"weekday":"月曜","month":"2000-01","coverage":0.16129032258064516,"days":5,"complete":false,"impressions":177098,"avgDailyImpressions":35419.6,"medianDailyImpressions":21591,"posts":5,"impressionsPerPost":35419.6,"engagement":2388,"engagementRate":0.013484059673175303,"likes":787,"bookmarks":812,"saveRate":0.0045850320161718375,"reposts":115,"repostRate":0.0006493579825859128,"replies":62,"replyRate":0.00035008865148110086,"shares":76,"shareRate":0.0004291409276219946,"profileVisits":536,"newFollowers":176,"unfollows":17,"netFollowers":159,"acquisitionRate":0.004020372900879739,"followConversion":0.3283582089552239,"top1Share":0.4933144360749416,"top3Share":0.8129566680594925},{"weekday":"火曜","month":"2000-01","coverage":0.16129032258064516,"days":5,"complete":false,"impressions":139879,"avgDailyImpressions":27975.8,"medianDailyImpressions":20690,"posts":6,"impressionsPerPost":23313.166666666668,"engagement":1444,"engagementRate":0.010323207915412606,"likes":550,"bookmarks":358,"saveRate":0.002559354870995646,"reposts":104,"repostRate":0.0007434997390601877,"replies":73,"replyRate":0.0005218796245326318,"shares":38,"shareRate":0.0002716633661950686,"profileVisits":321,"newFollowers":89,"unfollows":19,"netFollowers":70,"acquisitionRate":0.00293110474052574,"followConversion":0.2772585669781931,"top1Share":0.3730152488936867,"top3Share":0.7357787802314858},{"weekday":"水曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":91038,"avgDailyImpressions":22759.5,"medianDailyImpressions":21589,"posts":3,"impressionsPerPost":30346,"engagement":788,"engagementRate":0.008655726180276367,"likes":332,"bookmarks":153,"saveRate":0.001680616885256706,"reposts":59,"repostRate":0.0006480810211120631,"replies":47,"replyRate":0.0005162679320723215,"shares":17,"shareRate":0.00018673520947296734,"profileVisits":180,"newFollowers":46,"unfollows":8,"netFollowers":38,"acquisitionRate":0.002482479843581801,"followConversion":0.25555555555555554,"top1Share":0.3431094707704475,"top3Share":0.8173949339836113},{"weekday":"木曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":327556,"avgDailyImpressions":81889,"medianDailyImpressions":85918.5,"posts":2,"impressionsPerPost":163778,"engagement":2590,"engagementRate":0.007907044902245723,"likes":840,"bookmarks":831,"saveRate":0.0025369707775159058,"reposts":92,"repostRate":0.000280868004249655,"replies":57,"replyRate":0.0001740160461111993,"shares":91,"shareRate":0.0002778150911599849,"profileVisits":679,"newFollowers":189,"unfollows":11,"netFollowers":178,"acquisitionRate":0.0026499285618337017,"followConversion":0.27835051546391754,"top1Share":0.3945279585780752,"top3Share":0.9191313851677271},{"weekday":"金曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":122002,"avgDailyImpressions":30500.5,"medianDailyImpressions":29473,"posts":3,"impressionsPerPost":40667.333333333336,"engagement":1173,"engagementRate":0.009614596482024885,"likes":460,"bookmarks":304,"saveRate":0.0024917624301240963,"reposts":80,"repostRate":0.0006557269552958148,"replies":65,"replyRate":0.0005327781511778496,"shares":33,"shareRate":0.00027048736905952364,"profileVisits":231,"newFollowers":66,"unfollows":7,"netFollowers":59,"acquisitionRate":0.0024343863215357127,"followConversion":0.2857142857142857,"top1Share":0.3756495795150899,"top3Share":0.8588055933509287},{"weekday":"土曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":214184,"avgDailyImpressions":53546,"medianDailyImpressions":19156,"posts":4,"impressionsPerPost":53546,"engagement":2483,"engagementRate":0.011592836066186083,"likes":804,"bookmarks":619,"saveRate":0.002890038471594517,"reposts":132,"repostRate":0.0006162925335225787,"replies":79,"replyRate":0.00036884174354760393,"shares":47,"shareRate":0.00021943749299667574,"profileVisits":802,"newFollowers":92,"unfollows":14,"netFollowers":78,"acquisitionRate":0.004173981249766556,"followConversion":0.11471321695760599,"top1Share":0.7691144063048594,"top3Share":0.9479886452769581},{"weekday":"日曜","month":"2000-01","coverage":0.12903225806451613,"days":4,"complete":false,"impressions":125344,"avgDailyImpressions":31336,"medianDailyImpressions":33270,"posts":3,"impressionsPerPost":41781.333333333336,"engagement":1209,"engagementRate":0.00964545570589737,"likes":536,"bookmarks":191,"saveRate":0.001523806484554506,"reposts":107,"repostRate":0.0008536507531273934,"replies":84,"replyRate":0.0006701557314271126,"shares":27,"shareRate":0.0002154071993872862,"profileVisits":264,"newFollowers":65,"unfollows":20,"netFollowers":45,"acquisitionRate":0.002624776614756191,"followConversion":0.24621212121212122,"top1Share":0.31006669645136586,"top3Share":0.8409257722747}],"topDays":[{"Date":"2026-06-06","インプレッション数":164732,"いいね":515,"エンゲージメント":1874,"ブックマーク":540,"共有された回数":35,"新しいフォロー":73,"フォロー解除":7,"返信":29,"リポスト":67,"プロフィールへのアクセス数":688,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-04","インプレッション数":129230,"いいね":331,"エンゲージメント":1202,"ブックマーク":372,"共有された回数":39,"新しいフォロー":105,"フォロー解除":3,"返信":19,"リポスト":26,"プロフィールへのアクセス数":415,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-25","インプレッション数":127592,"いいね":324,"エンゲージメント":868,"ブックマーク":305,"共有された回数":27,"新しいフォロー":50,"フォロー解除":1,"返信":23,"リポスト":38,"プロフィールへのアクセス数":151,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-08","インプレッション数":87365,"いいね":435,"エンゲージメント":1575,"ブックマーク":687,"共有された回数":55,"新しいフォロー":136,"フォロー解除":4,"返信":15,"リポスト":39,"プロフィールへのアクセス数":344,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-16","インプレッション数":52177,"いいね":174,"エンゲージメント":546,"ブックマーク":214,"共有された回数":24,"新しいフォロー":45,"フォロー解除":2,"返信":13,"リポスト":19,"プロフィールへのアクセス数":102,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0}],"bottomDays":[{"Date":"2026-06-27","インプレッション数":11140,"いいね":81,"エンゲージメント":164,"ブックマーク":10,"共有された回数":3,"新しいフォロー":3,"フォロー解除":3,"返信":16,"リポスト":21,"プロフィールへのアクセス数":33,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-22","インプレッション数":13565,"いいね":51,"エンゲージメント":104,"ブックマーク":17,"共有された回数":1,"新しいフォロー":7,"フォロー解除":4,"返信":3,"リポスト":8,"プロフィールへのアクセス数":24,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-03","インプレッション数":16624,"いいね":42,"エンゲージメント":93,"ブックマーク":15,"共有された回数":1,"新しいフォロー":5,"フォロー解除":2,"返信":7,"リポスト":7,"プロフィールへのアクセス数":21,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-23","インプレッション数":16627,"いいね":76,"エンゲージメント":175,"ブックマーク":34,"共有された回数":2,"新しいフォロー":8,"フォロー解除":1,"返信":19,"リポスト":18,"プロフィールへのアクセス数":26,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-06-19","インプレッション数":17226,"いいね":61,"エンゲージメント":133,"ブックマーク":25,"共有された回数":2,"新しいフォロー":6,"フォロー解除":2,"返信":13,"リポスト":14,"プロフィールへのアクセス数":18,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0}]},{"month":"2026-07","coverage":0.5161290322580645,"days":16,"complete":false,"impressions":1201921,"avgDailyImpressions":75120.0625,"medianDailyImpressions":18892.5,"posts":11,"impressionsPerPost":109265.54545454546,"engagement":8204,"engagementRate":0.006825739794878365,"likes":3164,"bookmarks":2875,"saveRate":0.0023920041333831423,"reposts":424,"repostRate":0.00035276860958415734,"replies":278,"replyRate":0.00023129639968017866,"shares":211,"shareRate":0.0001755523033543802,"profileVisits":1252,"newFollowers":414,"unfollows":56,"netFollowers":358,"acquisitionRate":0.001386114395205675,"followConversion":0.3306709265175719,"top1Share":0.30186925763007716,"top3Share":0.6658016625052728,"rowDates":["2026-07-01","2026-07-02","2026-07-03","2026-07-04","2026-07-05","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-11","2026-07-12","2026-07-13","2026-07-14","2026-07-15","2026-07-16"],"previousMonth":"2026-06","changes":{"avgDailyImpressions":0.8825494883054978,"medianDailyImpressions":-0.2619252256123764,"engagementRate":-0.32330435327629925,"saveRate":-0.12378502445621398,"repostRate":-0.3870832288798196,"acquisitionRate":-0.5558568178225083,"netFollowers":-0.42902711323763953,"top1Share":1.1936720866511847},"strategy":{"direction":"増えた到達を、保存・再訪・フォローへ変える","reason":"リーチは伸びていますが、上位日の寄与が大きく、反応の質を保った再現性が次の課題です。","actions":["高到達日の翌日までに、保存される補足投稿を出す","投稿ごとの次の導線を1つに絞る","バズ日を除いた日次中央値を週次で追う"],"stop":"インプレッション総数だけを最適化すること","keep":"高到達を生んだテーマや切り口を再利用すること"},"targets":{"dailyImpressionsFloor":39900,"saveRate":0.0025609662593536774,"acquisitionRate":0.0022534936185898717,"netFollowers":658,"top1Share":0.20186925763007715},"weekdays":[{"weekday":"月曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":148283,"avgDailyImpressions":74141.5,"medianDailyImpressions":74141.5,"posts":0,"impressionsPerPost":0,"engagement":929,"engagementRate":0.006265047240749108,"likes":361,"bookmarks":317,"saveRate":0.0021378040638508795,"reposts":50,"repostRate":0.0003371930700080252,"replies":43,"replyRate":0.00028998604020690166,"shares":23,"shareRate":0.00015510881220369158,"profileVisits":135,"newFollowers":45,"unfollows":8,"netFollowers":37,"acquisitionRate":0.0012138950520288907,"followConversion":0.3333333333333333,"top1Share":0.6142443840494191,"top3Share":1},{"weekday":"火曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":139370,"avgDailyImpressions":69685,"medianDailyImpressions":69685,"posts":3,"impressionsPerPost":46456.666666666664,"engagement":758,"engagementRate":0.0054387601348927315,"likes":291,"bookmarks":228,"saveRate":0.0016359331276458349,"reposts":43,"repostRate":0.0003085312477577671,"replies":37,"replyRate":0.00026548037597761353,"shares":12,"shareRate":0.0000861017435603071,"profileVisits":147,"newFollowers":32,"unfollows":3,"netFollowers":29,"acquisitionRate":0.0012843510081079143,"followConversion":0.21768707482993196,"top1Share":0.8547033077419818,"top3Share":1},{"weekday":"水曜","month":"2000-01","coverage":0.0967741935483871,"days":3,"complete":false,"impressions":46881,"avgDailyImpressions":15627,"medianDailyImpressions":16907,"posts":2,"impressionsPerPost":23440.5,"engagement":519,"engagementRate":0.01107058296538043,"likes":235,"bookmarks":78,"saveRate":0.0016637870352594869,"reposts":47,"repostRate":0.0010025383417589216,"replies":39,"replyRate":0.0008318935176297434,"shares":12,"shareRate":0.0002559672361937672,"profileVisits":108,"newFollowers":21,"unfollows":11,"netFollowers":10,"acquisitionRate":0.0027516477890829976,"followConversion":0.19444444444444445,"top1Share":0.39621595102493545,"top3Share":1},{"weekday":"木曜","month":"2000-01","coverage":0.0967741935483871,"days":3,"complete":false,"impressions":42398,"avgDailyImpressions":14132.666666666666,"medianDailyImpressions":15135,"posts":2,"impressionsPerPost":21199,"engagement":400,"engagementRate":0.009434407283362423,"likes":170,"bookmarks":88,"saveRate":0.002075569602339733,"reposts":26,"repostRate":0.0006132364734185575,"replies":44,"replyRate":0.0010377848011698665,"shares":6,"shareRate":0.00014151610925043634,"profileVisits":66,"newFollowers":16,"unfollows":6,"netFollowers":10,"acquisitionRate":0.0019340534930892966,"followConversion":0.24242424242424243,"top1Share":0.45308740978348033,"top3Share":1},{"weekday":"金曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":261589,"avgDailyImpressions":130794.5,"medianDailyImpressions":130794.5,"posts":0,"impressionsPerPost":0,"engagement":1555,"engagementRate":0.005944439559767422,"likes":569,"bookmarks":655,"saveRate":0.002503927917458303,"reposts":76,"repostRate":0.00029053209423943665,"replies":21,"replyRate":0.00008027860498721277,"shares":43,"shareRate":0.00016438000068810232,"profileVisits":191,"newFollowers":92,"unfollows":9,"netFollowers":83,"acquisitionRate":0.001081849771970534,"followConversion":0.4816753926701571,"top1Share":0.9559346914434476,"top3Share":1},{"weekday":"土曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":368525,"avgDailyImpressions":184262.5,"medianDailyImpressions":184262.5,"posts":1,"impressionsPerPost":368525,"engagement":2054,"engagementRate":0.005573570314089954,"likes":709,"bookmarks":876,"saveRate":0.002377043619835832,"reposts":76,"repostRate":0.0002062275286615562,"replies":43,"replyRate":0.00011668136490061732,"shares":84,"shareRate":0.00022793568957329895,"profileVisits":266,"newFollowers":123,"unfollows":12,"netFollowers":111,"acquisitionRate":0.0010555593243334917,"followConversion":0.462406015037594,"top1Share":0.9845275083101553,"top3Share":1},{"weekday":"日曜","month":"2000-01","coverage":0.06451612903225806,"days":2,"complete":false,"impressions":194875,"avgDailyImpressions":97437.5,"medianDailyImpressions":97437.5,"posts":3,"impressionsPerPost":64958.333333333336,"engagement":1989,"engagementRate":0.010206542655548429,"likes":829,"bookmarks":633,"saveRate":0.003248236048749198,"reposts":106,"repostRate":0.0005439384220654265,"replies":51,"replyRate":0.0002617062219371392,"shares":31,"shareRate":0.00015907633098139834,"profileVisits":339,"newFollowers":85,"unfollows":7,"netFollowers":78,"acquisitionRate":0.002175753688261706,"followConversion":0.25073746312684364,"top1Share":0.9614162924951892,"top3Share":1}],"topDays":[{"Date":"2026-07-11","インプレッション数":362823,"いいね":679,"エンゲージメント":1993,"ブックマーク":872,"共有された回数":83,"新しいフォロー":122,"フォロー解除":6,"返信":39,"リポスト":67,"プロフィールへのアクセス数":253,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-10","インプレッション数":250062,"いいね":505,"エンゲージメント":1427,"ブックマーク":644,"共有された回数":42,"新しいフォロー":88,"フォロー解除":4,"返信":12,"リポスト":60,"プロフィールへのアクセス数":164,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-12","インプレッション数":187356,"いいね":778,"エンゲージメント":1882,"ブックマーク":627,"共有された回数":31,"新しいフォロー":82,"フォロー解除":5,"返信":37,"リポスト":94,"プロフィールへのアクセス数":315,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-07","インプレッション数":119120,"いいね":217,"エンゲージメント":581,"ブックマーク":200,"共有された回数":12,"新しいフォロー":19,"フォロー解除":3,"返信":22,"リポスト":24,"プロフィールへのアクセス数":106,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-13","インプレッション数":91082,"いいね":240,"エンゲージメント":592,"ブックマーク":185,"共有された回数":18,"新しいフォロー":32,"フォロー解除":2,"返信":27,"リポスト":34,"プロフィールへのアクセス数":88,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0}],"bottomDays":[{"Date":"2026-07-04","インプレッション数":5702,"いいね":30,"エンゲージメント":61,"ブックマーク":4,"共有された回数":1,"新しいフォロー":1,"フォロー解除":6,"返信":4,"リポスト":9,"プロフィールへのアクセス数":13,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-05","インプレッション数":7519,"いいね":51,"エンゲージメント":107,"ブックマーク":6,"共有された回数":0,"新しいフォロー":3,"フォロー解除":2,"返信":14,"リポスト":12,"プロフィールへのアクセス数":24,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-02","インプレッション数":8053,"いいね":49,"エンゲージメント":86,"ブックマーク":1,"共有された回数":0,"新しいフォロー":5,"フォロー解除":4,"返信":12,"リポスト":6,"プロフィールへのアクセス数":18,"ポストを作成":1,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-01","インプレッション数":11399,"いいね":71,"エンゲージメント":146,"ブックマーク":7,"共有された回数":0,"新しいフォロー":9,"フォロー解除":8,"返信":16,"リポスト":14,"プロフィールへのアクセス数":38,"ポストを作成":2,"動画再生数":0,"メディアの再生数":0},{"Date":"2026-07-03","インプレッション数":11527,"いいね":64,"エンゲージメント":128,"ブックマーク":11,"共有された回数":1,"新しいフォロー":4,"フォロー解除":5,"返信":9,"リポスト":16,"プロフィールへのアクセス数":27,"ポストを作成":0,"動画再生数":0,"メディアの再生数":0}]}],"selectedMonth":"2026-06","dataRange":{"start":"2026-04-18","end":"2026-07-16"},"weekly":{"week":"2026-W34","range":"2026-08-18 — 2026-08-24","updatedAt":"2026-08-18","policy":"本線5本＋差し替え2本。事件速報で到達、手元検証とプロンプト分解で保存。本線外テーマは出さない。","source":"公開投稿の閲覧・保存と、手元の投稿別CSV。日次概要だけではテーマを断定していない。","articles":[{"date":"2026-08-15","title":"GPTs公開終了 → Skillへ移せ","views":34784,"likes":113,"bookmarks":112,"verdict":"質も議論も最強"},{"date":"2026-08-10","title":"OiiOii MV機能","views":416683,"likes":39,"bookmarks":28,"verdict":"到達は突出。保存は普通"},{"date":"2026-08-02","title":"MiniMax H3ローンチ解説","views":68713,"likes":43,"bookmarks":67,"verdict":"到達＋保存のバランス最良"},{"date":"2026-08-10","title":"Grok Imagine Image 2.0","views":19731,"likes":18,"bookmarks":25,"verdict":"安定。実務解説型"},{"date":"2026-08-14","title":"Grok 4.6 競合調査","views":11663,"likes":19,"bookmarks":22,"verdict":"安定"},{"date":"2026-08-16","title":"新記事（Flova / 運用系）","views":7229,"likes":16,"bookmarks":8,"verdict":"立ち上がり中"},{"date":"2026-08-09","title":"オリジナルコンテンツ報酬","views":2576,"likes":18,"bookmarks":0,"verdict":"弱い。本線外"},{"date":"2026-08-08","title":"退職コスト系","views":2714,"likes":17,"bookmarks":0,"verdict":"弱い。本線外"}],"patterns":[{"name":"事件速報","use":"到達","note":"公式発表・機能終了・新モデル。OiiOii MVやGPTs終了が該当。"},{"name":"手元検証","use":"保存","note":"同じプロンプト比較、ローカル構築、失敗と直し。H3解説がこの型。"},{"name":"プロンプト分解","use":"保存＋導線","note":"1本をブロックに割る。商品・教材への接続がしやすい。"}],"plan":[{"day":"月","date":"2026-08-18","title":"MiniMax H3をローカルで24秒まで安定させた話","slot":"本線","type":"実験レポート","why":"日曜に本人がノウハウ化を予告済み","core":"金曜構築 → 12秒 → 15秒 → 24秒連結。詰まった点だけ書く","goal":"保存","swap":""},{"day":"火","date":"2026-08-19","title":"同じプロンプトで Seedance 2.5 と Kling 1080p","slot":"本線","type":"対比","why":"月曜に比較動画を投稿済み","core":"リップはKling、忠実さはSeedance、クレジットは高い","goal":"保存","swap":""},{"day":"水","date":"2026-08-20","title":"カメラを変えると顔が崩れる。H3の直し方","slot":"本線","type":"完全ガイド","why":"未解決の問いを投稿している","core":"参照固定、カメラ指定、ネガティブ、シーン分割","goal":"保存","swap":""},{"day":"木","date":"2026-08-21","title":"GPTsは残して、中身だけSkillへ。30分作業","slot":"本線","type":"教科書","why":"8/15の概念編の次は手を動かす編","core":"消さない、書き出す、1仕事1Skill、見本を1つ","goal":"保存","swap":"より大きいAI事件が来たら金曜と入れ替え"},{"day":"金","date":"2026-08-22","title":"ローカルH3 vs 有料Seedance。1本あたりのコスパ","slot":"差し替え","type":"対比","why":"クレジット高いが繰り返し出ている","core":"品質・尺・待ち・単価・用途。勝ち負けを1つに決めない","goal":"保存","swap":"8/18以降の公式発表・機能終了があれば速報に差し替え"},{"day":"土","date":"2026-08-23","title":"実写美女以外で、同じ型が通るか","slot":"本線","type":"実験レポート","why":"美女だけじゃない投稿が未消化","core":"同じ構図指定を別モチーフへ。通る条件と崩れる条件","goal":"保存＋導線","swap":""},{"day":"日","date":"2026-08-24","title":"1080pが普通になったあと、差は編集と連結","slot":"差し替え","type":"コラム","why":"生成単体ニュースは出尽くした","core":"連結、字幕、尺、完成形","goal":"フォロー","swap":"週後半の新発表、または偏った反応の深掘り"}]}}</script>
+  <script>
+    const DATA = JSON.parse(document.getElementById("x-dashboard-data").textContent);
+    const COLORS = ["#2f80ed", "#22b8a0", "#8b5cf6", "#ed8a28"];
+    let selectedMonth = DATA.selectedMonth;
+
+    const $ = (selector) => document.querySelector(selector);
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);
+    const number = (value, digits = 0) => new Intl.NumberFormat("ja-JP", { maximumFractionDigits: digits }).format(value ?? 0);
+    const percent = (value, digits = 2) => `${number((value ?? 0) * 100, digits)}%`;
+    const monthLabel = (month) => { const [year, value] = month.split("-"); return `${year}年${Number(value)}月`; };
+    const model = () => DATA.months.find((item) => item.month === selectedMonth);
+    const previous = () => { const current = model(); return DATA.months.find((item) => item.month === current.previousMonth); };
+    const monthRows = () => DATA.rows.filter((row) => row.Date.startsWith(selectedMonth));
+
+    function deltaClass(change, lowerIsBetter = false) {
+      if (change === null || Math.abs(change) < .1) return "neutral";
+      const good = lowerIsBetter ? change < 0 : change > 0;
+      return good ? "good" : "bad";
+    }
+    function deltaText(change) {
+      if (change === null) return "比較なし";
+      const sign = change > 0 ? "+" : "";
+      return `${sign}${percent(change, 1)}`;
+    }
+
+    function renderHeader() {
+      const select = $("#monthSelect");
+      select.innerHTML = DATA.months.map((item) => `<option value="${item.month}" ${item.month === selectedMonth ? "selected" : ""}>${monthLabel(item.month)}${item.complete ? "" : "（暫定）"}</option>`).join("");
+      $("#dataRange").textContent = `データ期間 ${DATA.dataRange.start} — ${DATA.dataRange.end}`;
+      $("#comparisonMeta").textContent = model().previousMonth ? `比較月 ${monthLabel(model().previousMonth)}` : "比較月なし";
+    }
+
+    function renderHero() {
+      const current = model();
+      $("#direction").textContent = current.strategy.direction;
+      $("#directionReason").textContent = current.strategy.reason;
+      const badge = $("#statusBadge");
+      badge.textContent = current.complete ? `${monthLabel(current.month)}・確定` : `${monthLabel(current.month)}・暫定`;
+      badge.classList.toggle("provisional", !current.complete);
+      const targets = [
+        ["通常日の中央値", `${number(current.targets.dailyImpressionsFloor)} 以上`],
+        ["保存率", `${percent(current.targets.saveRate)} 以上`],
+        ["集客率", `${percent(current.targets.acquisitionRate)} 以上`],
+        ["フォロー純増", `${number(current.targets.netFollowers)} 以上`],
+        ["上位1日依存", `${percent(current.targets.top1Share, 1)} 以下`],
+      ];
+      $("#targetList").innerHTML = targets.map(([label, value]) => `<div class="target-item"><span>${label}</span><strong>${value}</strong></div>`).join("");
+      $("#actionList").innerHTML = current.strategy.actions.map((action) => `<div class="action-item">${escapeHtml(action)}</div>`).join("");
+      $("#stopKeep").innerHTML = `<div class="mini-callout stop"><strong>STOP</strong>${escapeHtml(current.strategy.stop)}</div><div class="mini-callout keep"><strong>CONTINUE</strong>${escapeHtml(current.strategy.keep)}</div>`;
+    }
+
+    function renderKpis() {
+      const current = model();
+      const prior = previous();
+      const configs = [
+        ["日平均インプレ", "avgDailyImpressions", (v) => number(v), false],
+        ["中央値インプレ", "medianDailyImpressions", (v) => number(v), false],
+        ["ENG率", "engagementRate", (v) => percent(v), false],
+        ["保存率", "saveRate", (v) => percent(v), false],
+        ["拡散率", "repostRate", (v) => percent(v), false],
+        ["集客率", "acquisitionRate", (v) => percent(v), false],
+        ["フォロー純増", "netFollowers", (v) => number(v), false],
+        ["上位1日依存", "top1Share", (v) => percent(v, 1), true],
+      ];
+      $("#kpiGrid").innerHTML = configs.map(([label, key, format, lower]) => {
+        const change = current.changes[key];
+        return `<article class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-value">${format(current[key])}</div><div class="kpi-foot"><span>前月 ${prior ? format(prior[key]) : "—"}</span><span class="delta ${deltaClass(change, lower)}">${deltaText(change)}</span></div></article>`;
+      }).join("");
+    }
+
+    function lineChart(target, items, series, valueFormatter, ariaLabel) {
+      if (!items.length) { target.innerHTML = `<div class="empty">表示できるデータがありません</div>`; return; }
+      const width = 680, height = 280, left = 62, right = 22, top = 20, bottom = 48;
+      const values = items.flatMap((item) => series.map((entry) => item[entry.key] ?? 0));
+      const max = Math.max(...values, 1);
+      const min = 0;
+      const x = (index) => left + (items.length === 1 ? (width - left - right) / 2 : index * (width - left - right) / (items.length - 1));
+      const y = (value) => top + (max - value) * (height - top - bottom) / (max - min || 1);
+      const grid = Array.from({length: 5}, (_, index) => {
+        const value = max * (4 - index) / 4;
+        const yPos = top + index * (height - top - bottom) / 4;
+        return `<line class="grid" x1="${left}" y1="${yPos}" x2="${width-right}" y2="${yPos}"></line><text x="${left-9}" y="${yPos+3}" text-anchor="end">${valueFormatter(value)}</text>`;
+      }).join("");
+      const labels = items.map((item, index) => `<text x="${x(index)}" y="${height-18}" text-anchor="middle">${item.month.slice(2)}</text>`).join("");
+      const lines = series.map((entry, seriesIndex) => {
+        const points = items.map((item, index) => `${x(index)},${y(item[entry.key] ?? 0)}`).join(" ");
+        const dots = items.map((item, index) => `<circle class="point" cx="${x(index)}" cy="${y(item[entry.key] ?? 0)}" r="4" fill="${COLORS[seriesIndex]}"><title>${monthLabel(item.month)} ${entry.label}: ${valueFormatter(item[entry.key] ?? 0)}</title></circle>`).join("");
+        return `<polyline class="series-line" points="${points}" stroke="${COLORS[seriesIndex]}"></polyline>${dots}`;
+      }).join("");
+      const legend = series.map((entry, index) => `<span><i style="background:${COLORS[index]}"></i>${entry.label}</span>`).join("");
+      target.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(ariaLabel)}">${grid}<line class="axis" x1="${left}" y1="${height-bottom}" x2="${width-right}" y2="${height-bottom}"></line>${lines}${labels}</svg><div class="legend">${legend}</div>`;
+    }
+
+    function renderCharts() {
+      const history = DATA.months.filter((item) => item.month <= selectedMonth && (item.complete || item.month === selectedMonth)).slice(-12);
+      lineChart($("#reachChart"), history, [{key:"avgDailyImpressions",label:"日平均"},{key:"medianDailyImpressions",label:"中央値"}], (value) => number(value >= 10000 ? value / 1000 : value, value >= 10000 ? 0 : 0) + (value >= 10000 ? "k" : ""), "日平均と中央値インプレッションの月次推移");
+      lineChart($("#qualityChart"), history, [{key:"engagementRate",label:"ENG率"},{key:"saveRate",label:"保存率"},{key:"acquisitionRate",label:"集客率"}], (value) => percent(value, 1), "反応品質率の月次推移");
+    }
+
+    function renderMonthlyTable() {
+      const headers = ["月", "状態", "日平均", "中央値", "ENG率", "保存率", "拡散率", "集客率", "純増", "上位1日"];
+      const body = [...DATA.months].reverse().map((item) => `<tr class="${item.month === selectedMonth ? "current-row" : ""}"><td>${monthLabel(item.month)}</td><td>${item.complete ? "確定" : "暫定"}</td><td>${number(item.avgDailyImpressions)}</td><td>${number(item.medianDailyImpressions)}</td><td>${percent(item.engagementRate)}</td><td>${percent(item.saveRate)}</td><td>${percent(item.repostRate)}</td><td>${percent(item.acquisitionRate)}</td><td>${number(item.netFollowers)}</td><td>${percent(item.top1Share,1)}</td></tr>`).join("");
+      $("#monthlyTable").innerHTML = `<thead><tr>${headers.map((value) => `<th>${value}</th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+    }
+
+    function renderWeekday() {
+      const items = model().weekdays;
+      const max = Math.max(...items.map((item) => item.avgDailyImpressions), 1);
+      $("#weekdayBars").innerHTML = items.map((item) => `<div class="bar-row"><strong>${item.weekday}</strong><div class="bar-track"><div class="bar-fill" style="width:${item.avgDailyImpressions / max * 100}%"></div></div><span class="bar-value">${number(item.avgDailyImpressions)}</span></div>`).join("");
+      const headers = ["曜日", "日数", "投稿", "日平均", "ENG率", "保存率", "集客率"];
+      const body = items.map((item) => `<tr><td>${item.weekday}</td><td>${number(item.days)}</td><td>${number(item.posts)}</td><td>${number(item.avgDailyImpressions)}</td><td>${percent(item.engagementRate)}</td><td>${percent(item.saveRate)}</td><td>${percent(item.acquisitionRate)}</td></tr>`).join("");
+      $("#weekdayTable").innerHTML = `<thead><tr>${headers.map((value) => `<th>${value}</th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+    }
+
+    function renderRanks(target, rows) {
+      target.innerHTML = rows.map((row, index) => `<div class="rank-item"><span class="rank-no">${index+1}</span><span class="rank-date">${row.Date.slice(5)}</span><span class="rank-weekday">${["日","月","火","水","木","金","土"][new Date(`${row.Date}T00:00:00Z`).getUTCDay()]}曜</span><span class="rank-value">${number(row["インプレッション数"])}</span></div>`).join("");
+    }
+
+    function renderDaily() {
+      const current = model();
+      renderRanks($("#topDays"), current.topDays);
+      renderRanks($("#bottomDays"), current.bottomDays);
+      const headers = ["日付", "インプレ", "ENG", "ENG率", "いいね", "リポスト", "返信", "保存", "集客", "新規F", "解除", "投稿"];
+      const body = [...monthRows()].reverse().map((row) => {
+        const impressions = row["インプレッション数"];
+        const rate = (value) => impressions ? value / impressions : 0;
+        return `<tr><td>${row.Date}</td><td>${number(impressions)}</td><td>${number(row["エンゲージメント"])}</td><td>${percent(rate(row["エンゲージメント"]))}</td><td>${number(row["いいね"])}</td><td>${number(row["リポスト"])}</td><td>${number(row["返信"])}</td><td>${number(row["ブックマーク"])}</td><td>${number(row["プロフィールへのアクセス数"] + row["新しいフォロー"])}</td><td>${number(row["新しいフォロー"])}</td><td>${number(row["フォロー解除"])}</td><td>${number(row["ポストを作成"])}</td></tr>`;
+      }).join("");
+      $("#dailyTable").innerHTML = `<thead><tr>${headers.map((value) => `<th>${value}</th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+    }
+
+    function renderWeekly() {
+      const weekly = DATA.weekly;
+      const empty = $("#weeklyEmpty");
+      const body = $("#weeklyBody");
+      if (!weekly) {
+        empty.hidden = false;
+        body.hidden = true;
+        $("#weeklyBadge").textContent = "未設定";
+        $("#weeklyBadge").classList.add("provisional");
+        return;
+      }
+      empty.hidden = true;
+      body.hidden = false;
+      $("#weeklyBadge").textContent = weekly.week || "週次";
+      $("#weeklyBadge").classList.remove("provisional");
+      $("#weeklyPolicy").textContent = weekly.policy || "今週の記事方針";
+      $("#weeklySource").textContent = weekly.source || "";
+      $("#weeklyRange").textContent = weekly.range || "";
+      $("#weeklyPatterns").innerHTML = (weekly.patterns ?? []).map((item) => `<div class="target-item"><span>${escapeHtml(item.name)}</span><strong>${escapeHtml(item.use)}</strong></div>`).join("");
+      $("#weeklyPatternCards").innerHTML = (weekly.patterns ?? []).map((item) => `<article class="pattern-card"><p class="label">${escapeHtml(item.use)}</p><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.note)}</p></article>`).join("");
+      const articles = weekly.articles ?? [];
+      const headers = ["日付", "テーマ", "閲覧", "いいね", "保存", "判定"];
+      const rows = articles.map((item) => `<tr><td>${escapeHtml(item.date)}</td><td>${escapeHtml(item.title)}</td><td>${number(item.views)}</td><td>${number(item.likes)}</td><td>${number(item.bookmarks)}</td><td>${escapeHtml(item.verdict)}</td></tr>`).join("");
+      $("#weeklyArticleTable").innerHTML = articles.length
+        ? `<thead><tr>${headers.map((value) => `<th>${value}</th>`).join("")}</tr></thead><tbody>${rows}</tbody>`
+        : "";
+      $("#weeklyPlan").innerHTML = (weekly.plan ?? []).map((item) => {
+        const swap = item.slot === "差し替え";
+        return `<article class="plan-item${swap ? " swap" : ""}"><div class="plan-day">${escapeHtml(item.day)}<br>${escapeHtml((item.date || "").slice(5))}</div><div><h3>${escapeHtml(item.title)}</h3><p class="plan-meta">${escapeHtml(item.type)} / ${escapeHtml(item.goal)} / ${escapeHtml(item.why)}</p><p class="plan-core">${escapeHtml(item.core)}</p>${item.swap ? `<p class="plan-core">差し替え: ${escapeHtml(item.swap)}</p>` : ""}</div><span class="slot-pill ${swap ? "swap" : "core"}">${escapeHtml(item.slot)}</span></article>`;
+      }).join("");
+    }
+
+    function renderRules() {
+      const rules = [
+        ["ENG率", "エンゲージメント ÷ インプレッション", "総合的な反応率。リーチ急増時は薄まりやすい。"],
+        ["保存率", "ブックマーク ÷ インプレッション", "後から見返される資産価値。"],
+        ["拡散率", "リポスト ÷ インプレッション", "公開の場で他者へ伝えたい割合。"],
+        ["集客率", "(プロフィールアクセス + 新規フォロー) ÷ インプレッション", "再訪・ファン化につながった割合。"],
+        ["上位1日依存度", "月最大インプレッション ÷ 月合計", "35%以上をバズ依存の注意目安とする。"],
+        ["完全月", "月末日あり + 日数カバレッジ80%以上", "未完了月は暫定表示し、既定の確定分析に使わない。"],
+        ["優先順位 1", "リーチ増 + 品質率低下 / バズ依存", "到達を保存・再訪・フォローへ変える。"],
+        ["優先順位 2–5", "量減品質増 → 保存低下 → 集客低下 → その他", "上から最初に一致した方向性を採用する。"],
+      ];
+      $("#rulesGrid").innerHTML = rules.map(([title, formula, note]) => `<article class="rule-card"><h3>${title}</h3><code>${escapeHtml(formula)}</code><p>${escapeHtml(note)}</p></article>`).join("");
+    }
+
+    function downloadSelectedCsv() {
+      const rows = monthRows();
+      const headers = Object.keys(rows[0] ?? {});
+      const quote = (value) => `"${String(value).replaceAll('"','""')}"`;
+      const csv = [headers.map(quote).join(","), ...rows.map((row) => headers.map((header) => quote(row[header])).join(","))].join("\r\n");
+      const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8"}));
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `x-analytics-${selectedMonth}.csv`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderAll() {
+      renderHeader();
+      renderHero();
+      renderKpis();
+      renderCharts();
+      renderMonthlyTable();
+      renderWeekday();
+      renderDaily();
+      renderWeekly();
+      renderRules();
+    }
+
+    $("#monthSelect").addEventListener("change", (event) => { selectedMonth = event.target.value; renderAll(); });
+    $("#downloadCsv").addEventListener("click", downloadSelectedCsv);
+    document.querySelectorAll(".nav button").forEach((button) => button.addEventListener("click", () => {
+      document.querySelectorAll(".nav button").forEach((item) => item.classList.toggle("active", item === button));
+      document.querySelectorAll(".view").forEach((view) => { view.hidden = view.id !== `view-${button.dataset.view}`; });
+    }));
+    renderAll();
+  </script>
+</body>
+</html>

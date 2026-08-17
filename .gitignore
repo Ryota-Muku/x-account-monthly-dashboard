@@ -1,0 +1,5 @@
+*.tmp-*
+.verify.mjs
+verify.mjs
+.DS_Store
+Thumbs.db
