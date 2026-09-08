@@ -2,14 +2,15 @@
 
 自己完結型HTML。外部CDNなし。月次KPIと週次X記事提案を1ファイルで切り替える。
 
-公開URL: https://ryota-muku.github.io/x-account-monthly-dashboard/
+公開URL: https://x-account-monthly-dashboard.vercel.app/
 
-## 更新の流れ
+更新は `x-monthly-analytics-dashboard` スキルが HTML再生成 → この `index.html` へ反映 → `git push` まで行う。Vercelがpushをトリガーに自動デプロイする。
+
+## 手動で更新する場合
 
 1. X Analytics のアカウント概要CSVを `Downloads` に置く（任意）
 2. 週次JSONを `C:\Users\PC_User\Documents\Grok\muku_sns-weekly\YYYY-Www.json` に置く
-3. 下のコマンドでHTMLを再生成する
-4. このフォルダで `git add` → `commit` → `push`
+3. 下のコマンドでHTMLを再生成し、スキルの `sync_dashboard.mjs` で push する
 
 ```powershell
 $NODE = "C:\Program Files\nodejs\node.exe"
@@ -25,9 +26,7 @@ $OUT = "C:\Users\PC_User\Documents\Grok\muku-x-dashboard\index.html"
   --weekly $WEEKLY `
   --account-name "むく"
 
-git -C "C:\Users\PC_User\Documents\Grok\muku-x-dashboard" add index.html
-git -C "C:\Users\PC_User\Documents\Grok\muku-x-dashboard" commit -m "Update dashboard"
-git -C "C:\Users\PC_User\Documents\Grok\muku-x-dashboard" push
+& $NODE "$SKILL\scripts\sync_dashboard.mjs" --html $OUT
 ```
 
 CSVがなくても、既存HTMLの履歴は残る。新しい週次JSONだけ渡す場合も `--existing` と `--output` は同じ `index.html` にする。
