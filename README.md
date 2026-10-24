@@ -1,43 +1,48 @@
-# むく X月次ダッシュボード
-
-自己完結型HTML。外部CDNなし。月次KPIと週次X記事提案を1ファイルで切り替える。
+# むく X週次投稿分析 / @muku_sns
 
 公開URL: https://x-account-monthly-dashboard.vercel.app/
 
-更新は `x-monthly-analytics-dashboard` スキルが HTML再生成 → この `index.html` へ反映 → `git push` まで行う。Vercelがpushをトリガーに自動デプロイする。
+## 使い方
 
-## 手動で更新する場合
+1. Xのクリエイターダッシュボードで **muku_sns** を選び、CSVをダウンロード。
+2. このサイトでアカウント確認にチェックし、CSVを選択（複数可）。
+3. 日別概要・投稿別を切り替えて、集計開始日から7日間を分析。
+4. 必要なら「週次レポート保存」でJSONを端末に保存。
 
-1. X Analytics のアカウント概要CSVを `Downloads` に置く（任意）
-2. 週次JSONを `C:\Users\PC_User\Documents\Grok\muku_sns-weekly\YYYY-Www.json` に置く
-3. 下のコマンドでHTMLを再生成し、スキルの `sync_dashboard.mjs` で push する
+日別の前週比には今回と前週の14日分が必要です。初期表示はCSVの最新日が含まれる月曜〜日曜。任意の開始日にも対応します。
 
-```powershell
-$NODE = "C:\Program Files\nodejs\node.exe"
-$SKILL = "C:\Users\PC_User\.grok\skills\x-monthly-analytics-dashboard"
-$CSV = "C:\Users\PC_User\Downloads\account_overview_analytics (1).csv"
-$WEEKLY = "C:\Users\PC_User\Documents\Grok\muku_sns-weekly\2026-W34.json"
-$OUT = "C:\Users\PC_User\Documents\Grok\muku-x-dashboard\index.html"
+- 日別CSV: インプレッション、反応率、保存、フォロー等と前週比較。
+- 投稿別CSV: 投稿日で抽出して到達・保存・フォロー・反応率のランキング。
+- 投稿日があるCSVの値は累積値の場合があり、日別実績とは合算しません。投稿別の前週比は出しません。
+- 欠けた日・空欄・未提供列をゼロ埋めしません。
+- 同じ日付・投稿IDは後から取り込んだ値で置換。複数ファイルは全て検証成功した場合のみ反映します。
+- CSVはブラウザのメモリ内で処理し、サーバーや外部AIには送信しません。ページ再読み込みで消えます。
+- アカウント名のないCSVは自動判別できないため、取込前に本人が確認します。投稿URLが他アカウントなら拒否します。
 
-& $NODE "$SKILL\scripts\build_x_dashboard.mjs" `
-  --csv $CSV `
-  --existing $OUT `
-  --output $OUT `
-  --weekly $WEEKLY `
-  --account-name "むく"
+## 対応CSVと検証範囲
 
-& $NODE "$SKILL\scripts\sync_dashboard.mjs" --html $OUT
+UTF-8（BOMあり可）、カンマ区切り、引用符・複数行本文に対応。英語・日本語の列名を `analytics.mjs` で対応付けています。日付およびインプレッション列は必須。投稿別は重複除去用の投稿IDか投稿URLも必須です。
+
+日付のみは元の集計日を保持。時刻つきはJSTに変換し、タイムゾーンがなければUTCとして扱います。未対応の列名・日付形式はエラーにして表示します。
+
+**実アカウントの最新CSVは未提供です。** 合成CSVで検証済みですが、実ファイルの列名が異なる場合はマッピングを追加してください。実データをリポジトリにコミットしないでください。
+
+## 月次アーカイブ
+
+旧 `index.html` は内容を保ったまま `archive.html` に移動しました。過去の月次KPI・週次記事提案はそちらで引き続き閲覧できます。古い数字は週次画面に混在させません。
+
+以前の `x-monthly-analytics-dashboard` スキルは `index.html` を再生成するため、そのまま使うと新画面を上書きします。月次生成・同期の出力先を **archive.html** に変更してから実行してください。
+
+## 開発・確認
+
+外部CDN・ランタイム依存なし。静的ファイルとしてVercelで配信します。
+
+```sh
+node --test tests/analytics.test.mjs
+node --check weekly.mjs
+python3 -m http.server 8766 --bind 127.0.0.1
 ```
 
-CSVがなくても、既存HTMLの履歴は残る。新しい週次JSONだけ渡す場合も `--existing` と `--output` は同じ `index.html` にする。
+ローカルURL: http://127.0.0.1:8766/ （ES modulesを使うためHTMLの直接ダブルクリックではなくHTTPで開く）。
 
-## 画面
-
-1. Overview — フォロー転換コックピット
-2. Market — 競合AI記事 vs 自垢の軸
-3. Conversion — テーマ別の遷移と転換
-4. Plan — 今週の記事7本と毎日のポスト
-5. Trends — 月次・曜日・ベストワースト
-6. Rules — 指標定義
-
-日次CSVから記事テーマは断定しない。テーマ判定は投稿別CSVと公開記事だけを使う。
+デフォルトブランチへのpushはVercelの本番デプロイをトリガーします。
