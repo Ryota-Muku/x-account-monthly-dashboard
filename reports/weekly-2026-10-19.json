@@ -1,0 +1,70 @@
+{
+  "id": "weekly-2026-10-19",
+  "kind": "weekly",
+  "account": "muku_sns",
+  "start": "2026-10-19",
+  "end": "2026-10-25",
+  "acquiredAt": "2026-10-25T14:12:00+09:00",
+  "days": 7,
+  "expectedDays": 7,
+  "provisional": true,
+  "totals": {
+    "impressions": 154367,
+    "engagements": 2076,
+    "bookmarks": 509,
+    "follows": 122,
+    "unfollows": 19,
+    "profile": 353
+  },
+  "notes": [
+    "今週は10/25 14時ごろ取得の暫定値です。表示154,367回、保存509件、新規フォロー122人、解除19人で純増103人。日曜の終了前なので確定前週比は出しません。",
+    "最も強かったのは10/22のGrok実写動画紹介。表示18,542・保存106・フォロー9で、今週の投稿別CSVでは3指標とも首位でした。",
+    "10/22の動画ツール比較は表示3,623・保存38・フォロー5。保存率約1.05%で、Grok紹介の約0.57%より高め。品質・速さ・安さを使い分ける判断材料が有力という仮説です。",
+    "顔の一貫性を保つKLINGのノウハウ投稿は保存25・フォロー0。保存される有用性と、継続して見る理由は別に設計する必要がありそうです。",
+    "次週は「比較→再現手順」の2本セットを試す。同じ題材の完成動画を並べて用途別のおすすめを示し、翌日に選んだツールで作る手順を投稿。比較投稿で次回の手順公開も予告します。",
+    "上記は次に検証する仮説です。投稿ごとの公開からの経過時間が異なり、数字だけで伸びた原因は断定できません。"
+  ],
+  "postCount": 75,
+  "topPosts": [
+    {
+      "date": "2026-10-22",
+      "text": "本当にGrok優秀すぎるんやが。。。 アニメだけでなく、実写も！？ しかも今気づいたんだが、勝手に文字が入ってる！！ まずAI動画やるならGrok一択よ！ SeedanceやMiniMaxなんて後々！ https://t.co/bLOaHAIkxc",
+      "url": "https://x.com/muku_sns/status/2113155163758481786",
+      "impressions": 18542,
+      "bookmarks": 106,
+      "follows": 9
+    },
+    {
+      "date": "2026-10-22",
+      "text": "やっぱりAI動画ツール1つ取っても全然違う。個人的に1番クオリティが高いと思うのは1枚目。KLING4.0。しかし、速さ、安さ、精度のコスパで言うと2枚目のGrok。3枚目はちょっとAIぽさが残るんだよなぁ。プロンプトの応答性はいいけど。みんなはどう思った？ https://t.co/EihQR6Ba4U",
+      "url": "https://x.com/muku_sns/status/2113236522925429019",
+      "impressions": 3623,
+      "bookmarks": 38,
+      "follows": 5
+    },
+    {
+      "date": "2026-10-24",
+      "text": "https://t.co/39ePGJXoMF",
+      "url": "https://x.com/muku_sns/status/2113847262812209525",
+      "impressions": 12055,
+      "bookmarks": 32,
+      "follows": 3
+    },
+    {
+      "date": "2026-10-24",
+      "text": "同じプロンプトで、OpenAIとCanvaに画像を作ってもらったら…😳 「文字と主役のバランス」に違いが出ました👇 ①OpenAI：大きな見出しと、ガラスの蝶が目を引く ②Canva：文字をコンパクトにまとめ、蝶と花を広く見せる 題材は「AIアート講座の告知」。 https://t.co/ZuNA7FciTL",
+      "url": "https://x.com/muku_sns/status/2113941105012338708",
+      "impressions": 4360,
+      "bookmarks": 30,
+      "follows": 1
+    },
+    {
+      "date": "2026-10-19",
+      "text": "KLINGは実写がマジで強い。 ただ、実写の顔の一貫性を保つには色々と工夫が必要。Text to Videoだと、一貫性が微妙なので、基本はImage to Videoが大事。キャラシートまでしっかりしておくと差異がなくなる。 また、元のモデルのクオリティも大事で、そういう時はMidjourneyで作るのがいいんよね。 https://t.co/4eVqYiAnbY",
+      "url": "https://x.com/muku_sns/status/2112106177463202192",
+      "impressions": 2953,
+      "bookmarks": 25,
+      "follows": 0
+    }
+  ]
+}

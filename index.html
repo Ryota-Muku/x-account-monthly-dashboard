@@ -8,6 +8,7 @@
 <body>
   <header><div class="shell"><div class="eyebrow">WEEKLY ANALYTICS / @muku_sns</div><h1>1週間を見て、<br>次の投稿を決める。</h1><p>到達・反応・フォローを、週単位で振り返る。</p><a href="archive.html">過去の月次分析・記事提案を見る ↗</a></div></header>
   <main class="shell">
+    <section class="panel" id="publishedReport"><span class="eyebrow">PUBLISHED REPORT / @muku_sns</span><h2>最新の分析レポート</h2><p>CSVを操作しなくても、取得済みの分析結果をここで確認できます。</p><div class="controls"><div><label for="reportKind">レポート種別</label><select id="reportKind"><option value="weekly">週次</option><option value="monthly">月次</option></select></div><div><label for="reportHistory">履歴</label><select id="reportHistory"></select></div></div><p id="reportMeta" class="muted"></p><div id="publishedBody" aria-live="polite">読み込み中…</div><p class="muted">更新予定：毎週月曜 09:00／毎月1日 09:30（日本時間）。取得に失敗した場合は前回の結果と取得日時を保持します。</p></section>
     <section class="panel import"><div><span class="eyebrow">01 / IMPORT</span><h2>クリエイターダッシュボードのCSV</h2><p>アカウント概要（日別）と投稿別CSVを読み込めます。前週比も見るなら、2週間以上のデータを用意してください。</p><p class="privacy">CSVはこのブラウザ内だけで処理。サーバー・外部AIには送信せず、再読み込みすると消えます。</p></div>
       <div class="upload"><label class="confirm"><input id="accountConfirm" type="checkbox"> @muku_sns からダウンロードしたCSVです</label><label for="csvInput" class="file-label">CSVを選択（複数可）</label><input id="csvInput" type="file" accept=".csv,text/csv" multiple disabled><p class="muted">同じ日・投稿IDは後から読み込んだ値に更新します。</p></div>
     </section>
@@ -22,5 +23,5 @@
     <section class="panel"><div class="section-head"><h2 id="tableTitle">日別の実績</h2><div><label for="sort">投稿ランキングの並び順</label><select id="sort"><option value="impressions">インプレッション</option><option value="bookmarks">ブックマーク</option><option value="follows">フォロー</option><option value="er">エンゲージメント率</option></select></div></div><div class="table-wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div><p id="tableNote" class="muted"></p></section>
     <details class="panel"><summary>指標・集計ルール</summary><ul><li>週の初期選択は、取込データの最新日が含まれる月曜〜日曜。開始日は任意に変更可能。</li><li>日付だけの行はCSVの集計日を維持。時刻つきの投稿はJSTに変換（タイムゾーンがなければUTCとして解釈）。</li><li>アカウント概要はその期間に発生した実績。投稿別はその期間に投稿されたポストのCSV記載値（累積の場合あり）。両者は合算しません。</li><li>前週比は直前7日間。日別は両週7日が揃い、対象期間が終了した場合だけ表示。投稿別の前週比は、エクスポート範囲・投稿の経過時間を検証できないため表示しません。</li><li>率は合計値から算出。未提供の列・空欄は「—」。ゼロと区別し、テーマや伸びた原因を数字だけで断定しません。</li><li>CSVにアカウント情報がない場合は自動判別できません。取込前にアカウントを確認してください。</li></ul></details>
     <footer>@muku_sns · Weekly Analytics · <a href="archive.html">月次アーカイブ</a></footer>
-  </main><script type="module" src="weekly.mjs"></script>
+  </main><script type="module" src="weekly.mjs"></script><script type="module" src="published.mjs"></script>
 </body></html>
