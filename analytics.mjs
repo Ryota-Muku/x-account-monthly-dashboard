@@ -45,6 +45,12 @@ export function monday(date) {
 }
 export function dateValue(raw) {
   const s = raw.trim();
+  // Current X exports contain English calendar dates, not timestamps.
+  const named = s.match(/^(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s+)?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),?\s+(\d{4})$/i);
+  if (named) {
+    const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    return dateValue(`${named[3]}-${String(months.indexOf(named[1].toLowerCase())+1).padStart(2,'0')}-${named[2].padStart(2,'0')}`);
+  }
   const dateOnly = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
   if (dateOnly) {
     const d = `${dateOnly[1]}-${dateOnly[2].padStart(2, '0')}-${dateOnly[3].padStart(2, '0')}`;
