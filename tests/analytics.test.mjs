@@ -26,6 +26,9 @@ test('Reject wrong account URLs and unknown columns without silent skipping',()=
   assert.throws(()=>importCSV('Date,Impressions\n2026-10-19,nope'));
 });
 test('ISO year boundaries and leap days',()=>{
+  assert.equal(dateValue('Sun, Oct 25, 2026'),'2026-10-25');
+  assert.equal(dateValue('Oct 9, 2026'),'2026-10-09');
+  assert.equal(dateValue('Mon, Feb 30, 2026'),null);
   assert.equal(monday('2027-01-01'),'2026-12-28');assert.equal(monday('2026-10-19'),'2026-10-19');
   assert.equal(monday('2026-10-25'),'2026-10-19');assert.equal(shift('2024-02-28',1),'2024-02-29');
   assert.equal(dateValue('2026-02-30'),null);assert.equal(dateValue('2026/10/9'),'2026-10-09');

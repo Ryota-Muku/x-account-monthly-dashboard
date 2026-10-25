@@ -37,10 +37,13 @@ function render() {
   const rows = datasets[type];
   const current = summarize(rows, start), previous = summarize(rows, shift(start, -7));
   const t = current.totals, p = previous.totals;
-  const comparable = type === 'daily' && current.days === 7 && previous.days === 7;
+  const todayJST = new Date(Date.now() + 9 * 3600000).toISOString().slice(0,10);
+  const ongoing = current.end >= todayJST;
+  const comparable = type === 'daily' && current.days === 7 && previous.days === 7 && !ongoing;
   const er = rate(t.engagements, t.impressions);
   $('period').textContent = `${start} — ${current.end}`;
   $('coverage').textContent = type === 'daily' ? `${current.days} / 7日分${current.days < 7 ? ' · 未完備' : ''}` : `${current.rows.length}投稿 · 累積値の可能性あり`;
+  if (ongoing) $('coverage').textContent += ' · 進行中・暫定';
   $('context').textContent = (type === 'daily' ? '日別CSVに記録された期間実績。' : 'この7日間に投稿されたポストのCSV記載値。期間内に発生した反応だけとは限りません。') + (rows.length ? ` 取込範囲: ${rows[0].date} 〜 ${rows.at(-1).date}。` : ' CSVを取り込むと表示されます。') + (comparable ? ` 比較: ${shift(start,-7)} 〜 ${shift(start,-1)}。` : ' 前週比: 比較条件を満たしていないため非表示。');
   const cards = [['インプレッション',t.impressions,p.impressions],['エンゲージメント率',er,rate(p.engagements,p.impressions),'rate'],['ブックマーク',t.bookmarks,p.bookmarks],['新しいフォロー',t.follows,p.follows],['プロフィールアクセス',t.profile,p.profile],['いいね',t.likes,p.likes],['リポスト',t.reposts,p.reposts],['投稿数',type==='post'?current.rows.length:t.posts,p.posts]];
   $('kpis').innerHTML = cards.map(([label,value,old,kind]) => {
@@ -53,7 +56,7 @@ function render() {
   const insights = [];
   if (!current.rows.length) insights.push('この期間のデータはありません。CSVを取り込むか、集計開始日を変更してください。');
   else {
-    if (type === 'daily' && !comparable) insights.push('まず今回と前週の14日分を揃える。欠けた日を0として扱わず、比較できる状態にするのが次の一手です。');
+    if (type === 'daily' && !comparable) insights.push(ongoing ? 'この期間は進行中です。当日分は途中の実績なので、前週比は期間が終了してから確認しましょう。' : 'まず今回と前週の14日分を揃える。欠けた日を0として扱わず、比較できる状態にするのが次の一手です。');
     if (comparable && t.impressions !== null && p.impressions !== null) {
       insights.push(t.impressions > p.impressions ? '到達は前週より増加。投稿別CSVで、どのポストが増加に寄与したか確認しましょう。' : '到達は前週以下。投稿本数の差と1本あたりの反応を分けて確認しましょう。');
     }
@@ -79,7 +82,7 @@ function render() {
     return `<tr><td>${title}</td>${values.map((v,i)=>`<td>${v}${i===0&&!r.missing&&r.impressions!==null?`<div class="bar" style="width:${r.impressions/max*100}%"></div>`:''}</td>`).join('')}</tr>`;
   }).join('') : '<tr><td colspan="7" class="empty">この期間の投稿データはありません</td></tr>';
   $('tableNote').textContent = type==='daily'?'未取込日と0の実績は区別します。':'並び順はCSV記載値の比較です。取得できない指標は末尾に表示します。';
-  report = {account:'muku_sns',start,end:current.end,source:type,totals:t,engagementRate:er,previousWeekComparable:comparable,previousWeek:comparable?previous.totals:null,notes:insights,rows:current.rows};
+  report = {account:'muku_sns',start,end:current.end,source:type,provisional:ongoing,totals:t,engagementRate:er,previousWeekComparable:comparable,previousWeek:comparable?previous.totals:null,notes:insights,rows:current.rows};
   $('export').disabled = !current.rows.length;
 }
 for (const id of ['start','source','sort']) $(id).addEventListener('change', render);
