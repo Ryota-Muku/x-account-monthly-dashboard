@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {lineChart,donut,radar,change,er} from '../charts.mjs';
+test('unknown and zero comparisons are not fabricated',()=>{assert.equal(change(10,0),null);assert.equal(er({impressions:0,engagements:0}),null);assert.match(radar({},null),/未取得/);assert.match(donut({likes:0,bookmarks:0,reposts:0,replies:0}),/0件/)});
+test('missing day breaks line into segments',()=>{const chart=lineChart([{date:'2026-01-01',impressions:10},{date:'2026-01-02',impressions:null},{date:'2026-01-03',impressions:20}],'impressions','表示');assert.equal((chart.match(/<polyline/g)||[]).length,2);assert.equal((chart.match(/<circle/g)||[]).length,2)});
+test('radar is relative to actual prior period, not absolute mixed metrics',()=>{const t={impressions:200,engagements:10,bookmarks:10,follows:6,profile:4},p={impressions:100,engagements:10,bookmarks:5,follows:3,profile:2};const result=radar(t,p);assert.match(result,/表示200/);assert.match(result,/反応率50/);assert.match(result,/外周200/)});
