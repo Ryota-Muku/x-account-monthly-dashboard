@@ -14,8 +14,114 @@
     "bookmarks": 606,
     "follows": 151,
     "unfollows": 20,
-    "profile": 426
+    "profile": 426,
+    "likes": 1192,
+    "replies": 56,
+    "reposts": 202
   },
+  "previous": {
+    "start": "2026-10-12",
+    "end": "2026-10-18",
+    "days": 7,
+    "totals": {
+      "impressions": 99749,
+      "engagements": 1522,
+      "bookmarks": 216,
+      "follows": 63,
+      "unfollows": 33,
+      "profile": 302,
+      "likes": 769,
+      "replies": 52,
+      "reposts": 160
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-10-19",
+      "impressions": 17251,
+      "engagements": 257,
+      "bookmarks": 60,
+      "follows": 13,
+      "unfollows": 3,
+      "profile": 48,
+      "likes": 116,
+      "replies": 5,
+      "reposts": 20
+    },
+    {
+      "date": "2026-10-20",
+      "impressions": 9897,
+      "engagements": 143,
+      "bookmarks": 30,
+      "follows": 11,
+      "unfollows": 4,
+      "profile": 28,
+      "likes": 65,
+      "replies": 2,
+      "reposts": 14
+    },
+    {
+      "date": "2026-10-21",
+      "impressions": 10628,
+      "engagements": 167,
+      "bookmarks": 19,
+      "follows": 6,
+      "unfollows": 7,
+      "profile": 28,
+      "likes": 93,
+      "replies": 4,
+      "reposts": 21
+    },
+    {
+      "date": "2026-10-22",
+      "impressions": 36802,
+      "engagements": 510,
+      "bookmarks": 157,
+      "follows": 32,
+      "unfollows": 1,
+      "profile": 85,
+      "likes": 222,
+      "replies": 9,
+      "reposts": 29
+    },
+    {
+      "date": "2026-10-23",
+      "impressions": 27796,
+      "engagements": 409,
+      "bookmarks": 101,
+      "follows": 29,
+      "unfollows": 1,
+      "profile": 66,
+      "likes": 199,
+      "replies": 11,
+      "reposts": 27
+    },
+    {
+      "date": "2026-10-24",
+      "impressions": 34646,
+      "engagements": 417,
+      "bookmarks": 105,
+      "follows": 18,
+      "unfollows": 2,
+      "profile": 69,
+      "likes": 191,
+      "replies": 13,
+      "reposts": 35
+    },
+    {
+      "date": "2026-10-25",
+      "impressions": 58128,
+      "engagements": 626,
+      "bookmarks": 134,
+      "follows": 42,
+      "unfollows": 2,
+      "profile": 102,
+      "likes": 306,
+      "replies": 12,
+      "reposts": 56
+    }
+  ],
+  "nextAction": "同じ題材の動画比較 → 翌日に再現手順を投稿。",
   "notes": [
     "日別実績（10/19〜10/25、7/7日）：表示195,148回、前週99,749回から95.6%増。比較週10/12〜10/18も7/7日を確認。",
     "保存606件（前週216件、180.6%増）、新規フォロー151件（前週63件）。解除20件を差し引いた純増は131件（前週30件）。",
