@@ -1,0 +1,176 @@
+{
+  "id": "weekly-2026-10-26",
+  "kind": "weekly",
+  "account": "muku_sns",
+  "start": "2026-10-26",
+  "end": "2026-11-01",
+  "acquiredAt": "2026-11-02T00:01:05Z",
+  "days": 7,
+  "expectedDays": 7,
+  "provisional": false,
+  "totals": {
+    "impressions": 112660,
+    "engagements": 1594,
+    "bookmarks": 236,
+    "follows": 85,
+    "unfollows": 25,
+    "profile": 302,
+    "likes": 813,
+    "replies": 57,
+    "reposts": 164
+  },
+  "previous": {
+    "start": "2026-10-19",
+    "end": "2026-10-25",
+    "days": 7,
+    "totals": {
+      "impressions": 195148,
+      "engagements": 2529,
+      "bookmarks": 606,
+      "follows": 151,
+      "unfollows": 20,
+      "profile": 426,
+      "likes": 1192,
+      "replies": 56,
+      "reposts": 202
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-10-26",
+      "impressions": 36870,
+      "engagements": 507,
+      "bookmarks": 95,
+      "follows": 44,
+      "unfollows": 7,
+      "profile": 110,
+      "likes": 249,
+      "replies": 15,
+      "reposts": 29
+    },
+    {
+      "date": "2026-10-27",
+      "impressions": 17381,
+      "engagements": 269,
+      "bookmarks": 27,
+      "follows": 9,
+      "unfollows": 3,
+      "profile": 37,
+      "likes": 160,
+      "replies": 12,
+      "reposts": 30
+    },
+    {
+      "date": "2026-10-28",
+      "impressions": 12265,
+      "engagements": 178,
+      "bookmarks": 19,
+      "follows": 6,
+      "unfollows": 4,
+      "profile": 35,
+      "likes": 90,
+      "replies": 7,
+      "reposts": 25
+    },
+    {
+      "date": "2026-10-29",
+      "impressions": 11860,
+      "engagements": 162,
+      "bookmarks": 19,
+      "follows": 5,
+      "unfollows": 0,
+      "profile": 21,
+      "likes": 87,
+      "replies": 10,
+      "reposts": 25
+    },
+    {
+      "date": "2026-10-30",
+      "impressions": 9118,
+      "engagements": 98,
+      "bookmarks": 14,
+      "follows": 4,
+      "unfollows": 4,
+      "profile": 21,
+      "likes": 50,
+      "replies": 1,
+      "reposts": 10
+    },
+    {
+      "date": "2026-10-31",
+      "impressions": 12151,
+      "engagements": 205,
+      "bookmarks": 30,
+      "follows": 12,
+      "unfollows": 5,
+      "profile": 51,
+      "likes": 92,
+      "replies": 7,
+      "reposts": 23
+    },
+    {
+      "date": "2026-11-01",
+      "impressions": 13015,
+      "engagements": 175,
+      "bookmarks": 32,
+      "follows": 5,
+      "unfollows": 2,
+      "profile": 27,
+      "likes": 85,
+      "replies": 5,
+      "reposts": 22
+    }
+  ],
+  "nextAction": "KLING×motion-studioの作例を1本再現し、公開7日後の保存数を比較する。",
+  "notes": [
+    "日別概要の表示回数は112,660（前週比-42.3%）、ブックマークは236（-61.1%）。",
+    "新規フォローは85、解除は25、純増は60。前週の純増131から減少。エンゲージメント率は1.41%（前週1.30%）。",
+    "対象週の投稿別CSVでは、KLING4.0×motion-studioの作例が保存9件で最多。上位投稿の型を1本再現し、公開7日後の保存数で検証する。",
+    "対象期間は2026-10-26〜2026-11-01、比較は2026-10-19〜2026-10-25（Asia/Tokyo）。両週の日別データは各7日。CSVの暦日は保持し、時差補正していない。",
+    "投稿別は投稿日で抽出した取得時点の累積値で、日別実績とは別集計。公開後の経過日数が異なるため、投稿別の前週比・原因の断定はしない。",
+    "本人のブラウザでプロフィール /muku_sns を確認し、概要・コンテンツとも4Wを選択。今回のCSV期間は日別2026-10-06〜2026-11-02、投稿別2026-10-06〜2026-11-01。対象週・比較週以外はレポート集計に含めていない。"
+  ],
+  "postCount": 82,
+  "topPosts": [
+    {
+      "date": "2026-10-31",
+      "text": "KLING4.0×今回配布コンテンツの「motion-studio」を組み合わせて作ってみました。 Seedanceのコストの半分でここまでができるならKLINGはかなり強いですよね🤔 https://t.co/BdzM4V2lCB",
+      "url": "https://x.com/muku_sns/status/2116532356555358508",
+      "impressions": 993,
+      "bookmarks": 9,
+      "follows": 0
+    },
+    {
+      "date": "2026-10-27",
+      "text": "https://t.co/Vd5pW998nK",
+      "url": "https://x.com/muku_sns/status/2115217489936486906",
+      "impressions": 2284,
+      "bookmarks": 7,
+      "follows": 0
+    },
+    {
+      "date": "2026-10-31",
+      "text": "もうAfterEffectなんて不要！ Claudeだけで作れるモーショングラフィックの教科書をリリース！ 今まで操作も難しく、手も出せなかった動画作成をこの教科書1冊で簡単に！ AIと話すだけで、あのキャラやあなたのあんなイメージが動画に！？ 3日間限定価格なのでお早めに！https://t.co/VJuoS0JqHc",
+      "url": "https://x.com/muku_sns/status/2116486278594372077",
+      "impressions": 7628,
+      "bookmarks": 7,
+      "follows": 0
+    },
+    {
+      "date": "2026-11-01",
+      "text": "むくの自作したスキル「motion-studio」とfalのAPIからMiniMaxを呼び出してこんな感じの動画が簡単に！ 記事をゲットすれば使えるskillで、色々と応用が可能！特別価格は明日まで。 デザイン部門1位も獲得！気になる方はお早めに！ https://t.co/hx7eSRCPWU",
+      "url": "https://x.com/muku_sns/status/2116758326772150736",
+      "impressions": 1090,
+      "bookmarks": 7,
+      "follows": 1
+    },
+    {
+      "date": "2026-10-26",
+      "text": "昨日初めて！AI動画コンテストに登録しました！ 締切ギリギリになって思い出しましたが、先日出したかおりさんコラボのコンテンツのノウハウと特典を活用して全自動で作成してみました！ 大学生の時に抱いていた不安をこの60秒の動画に詰め込みました！ https://t.co/OKsjee58N7",
+      "url": "https://x.com/muku_sns/status/2114845878091759975",
+      "impressions": 2681,
+      "bookmarks": 6,
+      "follows": 2
+    }
+  ]
+}
