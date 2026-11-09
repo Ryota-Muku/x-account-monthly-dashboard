@@ -1,5 +1,12 @@
 [
   {
+    "id": "weekly-2026-11-02",
+    "kind": "weekly",
+    "start": "2026-11-02",
+    "end": "2026-11-08",
+    "provisional": false
+  },
+  {
     "id": "weekly-2026-10-26",
     "kind": "weekly",
     "start": "2026-10-26",
