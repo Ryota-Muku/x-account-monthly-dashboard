@@ -1,0 +1,174 @@
+{
+  "id": "weekly-2026-11-02",
+  "kind": "weekly",
+  "account": "muku_sns",
+  "start": "2026-11-02",
+  "end": "2026-11-08",
+  "acquiredAt": "2026-11-09T00:00:57.219Z",
+  "days": 7,
+  "expectedDays": 7,
+  "provisional": false,
+  "totals": {
+    "impressions": 124167,
+    "engagements": 1921,
+    "bookmarks": 440,
+    "follows": 73,
+    "unfollows": 18,
+    "profile": 292,
+    "likes": 925,
+    "replies": 50,
+    "reposts": 165
+  },
+  "previous": {
+    "start": "2026-10-26",
+    "end": "2026-11-01",
+    "days": 7,
+    "totals": {
+      "impressions": 112660,
+      "engagements": 1594,
+      "bookmarks": 236,
+      "follows": 85,
+      "unfollows": 25,
+      "profile": 302,
+      "likes": 813,
+      "replies": 57,
+      "reposts": 164
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-11-02",
+      "impressions": 30973,
+      "engagements": 427,
+      "bookmarks": 100,
+      "follows": 19,
+      "unfollows": 2,
+      "profile": 66,
+      "likes": 204,
+      "replies": 6,
+      "reposts": 37
+    },
+    {
+      "date": "2026-11-03",
+      "impressions": 15834,
+      "engagements": 239,
+      "bookmarks": 56,
+      "follows": 9,
+      "unfollows": 5,
+      "profile": 36,
+      "likes": 111,
+      "replies": 11,
+      "reposts": 19
+    },
+    {
+      "date": "2026-11-04",
+      "impressions": 19476,
+      "engagements": 318,
+      "bookmarks": 61,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 64,
+      "likes": 140,
+      "replies": 13,
+      "reposts": 29
+    },
+    {
+      "date": "2026-11-05",
+      "impressions": 10156,
+      "engagements": 122,
+      "bookmarks": 15,
+      "follows": 1,
+      "unfollows": 4,
+      "profile": 23,
+      "likes": 66,
+      "replies": 5,
+      "reposts": 13
+    },
+    {
+      "date": "2026-11-06",
+      "impressions": 10186,
+      "engagements": 180,
+      "bookmarks": 33,
+      "follows": 3,
+      "unfollows": 2,
+      "profile": 19,
+      "likes": 103,
+      "replies": 9,
+      "reposts": 15
+    },
+    {
+      "date": "2026-11-07",
+      "impressions": 13604,
+      "engagements": 197,
+      "bookmarks": 45,
+      "follows": 7,
+      "unfollows": 2,
+      "profile": 20,
+      "likes": 100,
+      "replies": 2,
+      "reposts": 26
+    },
+    {
+      "date": "2026-11-08",
+      "impressions": 23938,
+      "engagements": 438,
+      "bookmarks": 130,
+      "follows": 18,
+      "unfollows": 1,
+      "profile": 64,
+      "likes": 201,
+      "replies": 4,
+      "reposts": 26
+    }
+  ],
+  "nextAction": "3Dプレビズの作例を手順付きで1本投稿し、保存とフォローを確認する。",
+  "notes": [
+    "日別インプレッションは124,167（前週112,660比+10.2%）、エンゲージメントは1,921（+20.5%）。",
+    "日別ブックマークは440（前週236比+86.4%）。新規フォローは73（前週85比-14.1%）、解除18、純増55。",
+    "保存上位は3Dプレビズの紹介（86保存）とPLATEAU東京駅の制作例（54保存）。同じ制作テーマを手順付きで1本試す。",
+    "対象11月2日〜8日、比較10月26日〜11月1日はともに日別7日分を取得。日付のみのCSVは元の暦日を保持。投稿別は累積値の可能性があり、日別実績と合算せず、投稿別前週比は出さない。"
+  ],
+  "postCount": 62,
+  "topPosts": [
+    {
+      "date": "2026-11-02",
+      "text": "これはすごいプレビズ！！先に3D空間で舞台と人物を配置して、動き・カメラの位置・撮る順番を決める。その仮映像をもとに、AIで実写やアニメにするとその通りになりますわ。 カメラワークさえわかって指示すれば、より精度の高い動画に。",
+      "url": "https://x.com/muku_sns/status/2117075213150208438",
+      "impressions": 7521,
+      "bookmarks": 86,
+      "follows": 8
+    },
+    {
+      "date": "2026-11-08",
+      "text": "Zimoさんの動画を参考に、国が無料で公開してる3D都市モデル「PLATEAU」から東京駅を切り出して、AI動画でつないだらこうなった。 作り方はシンプルでBlenderで静止画を3枚作って、あとは前の動画の最後のフレームを次の始まりにしてつなぐだけ。",
+      "url": "https://x.com/muku_sns/status/2119218619922219503",
+      "impressions": 4835,
+      "bookmarks": 54,
+      "follows": 4
+    },
+    {
+      "date": "2026-11-07",
+      "text": "Gemini Omni Flash1.2のリアルさがやばああい！！ 食べ物も本当にAI感無くなってきて、もう見分けつかないっす...",
+      "url": "https://x.com/muku_sns/status/2119034011041583479",
+      "impressions": 3059,
+      "bookmarks": 25,
+      "follows": 0
+    },
+    {
+      "date": "2026-11-03",
+      "text": "動画でカメラワークが中々指定されない事があるけど、プレビズにすればかんたーんにできちゃう。 これもskill化していたら、全自動で生成可能。 作成はもうAI。大事なのは企画力と分析なんよね。",
+      "url": "https://x.com/muku_sns/status/2117552962881143257",
+      "impressions": 3318,
+      "bookmarks": 24,
+      "follows": 3
+    },
+    {
+      "date": "2026-11-03",
+      "text": "x.com/i/article/2117…",
+      "url": "https://x.com/muku_sns/status/2117417058879348865",
+      "impressions": 8252,
+      "bookmarks": 24,
+      "follows": 1
+    }
+  ]
+}
