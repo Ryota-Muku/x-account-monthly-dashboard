@@ -1,0 +1,175 @@
+{
+  "id": "weekly-2026-11-09",
+  "kind": "weekly",
+  "account": "muku_sns",
+  "start": "2026-11-09",
+  "end": "2026-11-15",
+  "acquiredAt": "2026-11-16T09:01:23+09:00",
+  "days": 7,
+  "expectedDays": 7,
+  "provisional": false,
+  "totals": {
+    "impressions": 191635,
+    "engagements": 2441,
+    "bookmarks": 753,
+    "follows": 104,
+    "unfollows": 24,
+    "profile": 268,
+    "likes": 1167,
+    "replies": 29,
+    "reposts": 154
+  },
+  "previous": {
+    "start": "2026-11-02",
+    "end": "2026-11-08",
+    "days": 7,
+    "totals": {
+      "impressions": 124169,
+      "engagements": 1921,
+      "bookmarks": 440,
+      "follows": 73,
+      "unfollows": 18,
+      "profile": 292,
+      "likes": 925,
+      "replies": 50,
+      "reposts": 165
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-11-09",
+      "impressions": 26506,
+      "engagements": 256,
+      "bookmarks": 67,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 37,
+      "likes": 118,
+      "replies": 6,
+      "reposts": 21
+    },
+    {
+      "date": "2026-11-10",
+      "impressions": 47706,
+      "engagements": 501,
+      "bookmarks": 165,
+      "follows": 20,
+      "unfollows": 6,
+      "profile": 48,
+      "likes": 241,
+      "replies": 6,
+      "reposts": 28
+    },
+    {
+      "date": "2026-11-11",
+      "impressions": 70696,
+      "engagements": 1024,
+      "bookmarks": 352,
+      "follows": 39,
+      "unfollows": 3,
+      "profile": 85,
+      "likes": 491,
+      "replies": 8,
+      "reposts": 54
+    },
+    {
+      "date": "2026-11-12",
+      "impressions": 11976,
+      "engagements": 174,
+      "bookmarks": 47,
+      "follows": 4,
+      "unfollows": 3,
+      "profile": 20,
+      "likes": 85,
+      "replies": 0,
+      "reposts": 14
+    },
+    {
+      "date": "2026-11-13",
+      "impressions": 9690,
+      "engagements": 133,
+      "bookmarks": 28,
+      "follows": 6,
+      "unfollows": 4,
+      "profile": 26,
+      "likes": 66,
+      "replies": 0,
+      "reposts": 12
+    },
+    {
+      "date": "2026-11-14",
+      "impressions": 13350,
+      "engagements": 201,
+      "bookmarks": 53,
+      "follows": 11,
+      "unfollows": 4,
+      "profile": 33,
+      "likes": 95,
+      "replies": 6,
+      "reposts": 11
+    },
+    {
+      "date": "2026-11-15",
+      "impressions": 11711,
+      "engagements": 152,
+      "bookmarks": 41,
+      "follows": 8,
+      "unfollows": 2,
+      "profile": 19,
+      "likes": 71,
+      "replies": 3,
+      "reposts": 14
+    }
+  ],
+  "nextAction": "都市データ×制作手順を見せる作例を1本再現し、保存とフォローを検証する。",
+  "notes": [
+    "日別概要は対象週2026-11-09〜11-15と比較週2026-11-02〜11-08を各7日確認。4Wエクスポートは2026-10-20〜11-16の28日分。日付のみの値は元の集計日を保持。",
+    "日別インプレッション191,635（前週124,169、+54.3%）、エンゲージメント2,441（+27.1%）。反応率は合計値から1.27%（前週1.55%）で、到達増に対して反応率は低下。",
+    "日別ブックマーク753（前週440、+71.1%）、フォロー104・解除24で純増80（前週純増55）。プロフィールアクセス268（前週292、-8.2%）。",
+    "対象週の投稿別40件を取得。保存上位は11/10のPLATEAUとmuseによる京都の都市映像で339保存・33,622表示・12フォロー。対象週投稿の累積保存592の57.3%を占める。",
+    "投稿別値は取得時点の累積値であり、日別概要とは合算しない。前週投稿とは観測期間が異なるため投稿別前週比は出さない。公開する投稿参照は保存上位5件に限定。"
+  ],
+  "postCount": 40,
+  "topPosts": [
+    {
+      "date": "2026-11-10",
+      "text": "これ実はドローンで撮ってません。飛ばしたのはドローンじゃなくて、国が公開してる3D都市データ（PLATEAU）とmuse。 鴨川→四条大橋→祇園→八坂の塔まで29秒。本物と見分けついたらコメントで教えてください。",
+      "url": "https://x.com/muku_sns/status/2120095810314752509",
+      "impressions": 33622,
+      "bookmarks": 339,
+      "follows": 12
+    },
+    {
+      "date": "2026-11-09",
+      "text": "今日公開された「Claude Fable 5.2」と「Opus 5.5」に、 まったく同じ1段落の指示で 映画予告のタイトル演出を作らせました。 左：Opus 5.5 右：Fable 5.2 Opusは王道の予告を、2分40秒できれいに仕上げる\"職人\"。 Fableは「1本の赤い国境線」を自分で考えて、",
+      "url": "https://x.com/muku_sns/status/2119941490969624679",
+      "impressions": 35073,
+      "bookmarks": 80,
+      "follows": 3
+    },
+    {
+      "date": "2026-11-14",
+      "text": "これ一切動画生成していません。 作り方はシンプルで、 ①Blenderでプリビズ作る ②AIで実写風の写真に変換 ③その写真を参照に動画化。 ぜんぶmuseにお願いしたので、自分ではBlenderを一切開いてません。",
+      "url": "https://x.com/muku_sns/status/2121462169757978816",
+      "impressions": 3772,
+      "bookmarks": 39,
+      "follows": 4
+    },
+    {
+      "date": "2026-11-14",
+      "text": "Fable 5.2に「かっこいいむくを作って」と頼んだらカメラワークがえぐすぎた😳🔥 使ったのはたった2つ👇 ①GPT Imageで、絵を6枚つくる ②Fable 5.2に「人物と背景を分けて3D空間に並べて、カメラで撮って」と頼む これだけで ・FPVドローンの急降下 ・ビル群をすり抜ける ・ホイップパンで振り向き",
+      "url": "https://x.com/muku_sns/status/2121511644564275699",
+      "impressions": 3473,
+      "bookmarks": 26,
+      "follows": 2
+    },
+    {
+      "date": "2026-11-11",
+      "text": "これ、ドローンで撮ってません。ほうきで飛んでます。museでどんな指示をしたかで見せ方も全然変わる。ウィーンのリング通り1.3kmを、街のすぐ上すれすれで。 国立歌劇場→国会議事堂→市庁舎。",
+      "url": "https://x.com/muku_sns/status/2120524248557244912",
+      "impressions": 2302,
+      "bookmarks": 20,
+      "follows": 0
+    }
+  ]
+}
