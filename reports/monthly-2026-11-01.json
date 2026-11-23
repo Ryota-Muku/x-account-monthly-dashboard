@@ -1,0 +1,578 @@
+{
+  "id": "monthly-2026-11-01",
+  "kind": "monthly",
+  "account": "muku_sns",
+  "start": "2026-11-01",
+  "end": "2026-11-22",
+  "calendarEnd": "2026-11-30",
+  "calendarExpectedDays": 30,
+  "acquiredAt": "2026-11-23T03:13:20.805824+00:00",
+  "days": 22,
+  "expectedDays": 22,
+  "provisional": true,
+  "totals": {
+    "impressions": 436789,
+    "engagements": 5760,
+    "bookmarks": 1475,
+    "follows": 227,
+    "unfollows": 56,
+    "profile": 756,
+    "likes": 2814,
+    "replies": 127,
+    "reposts": 443
+  },
+  "previous": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "days": 31,
+    "totals": {
+      "impressions": 639883,
+      "engagements": 8592,
+      "bookmarks": 1782,
+      "follows": 479,
+      "unfollows": 115,
+      "profile": 1532,
+      "likes": 4073,
+      "replies": 285,
+      "reposts": 779
+    }
+  },
+  "matchedComparison": {
+    "start": "2026-10-01",
+    "end": "2026-10-22",
+    "days": 22,
+    "totals": {
+      "impressions": 419668,
+      "engagements": 5721,
+      "bookmarks": 1238,
+      "follows": 310,
+      "unfollows": 87,
+      "profile": 1020,
+      "likes": 2649,
+      "replies": 197,
+      "reposts": 519
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-11-01",
+      "impressions": 13015,
+      "engagements": 175,
+      "bookmarks": 32,
+      "follows": 5,
+      "unfollows": 2,
+      "profile": 27,
+      "likes": 85,
+      "replies": 5,
+      "reposts": 22
+    },
+    {
+      "date": "2026-11-02",
+      "impressions": 30973,
+      "engagements": 427,
+      "bookmarks": 100,
+      "follows": 19,
+      "unfollows": 2,
+      "profile": 66,
+      "likes": 204,
+      "replies": 6,
+      "reposts": 37
+    },
+    {
+      "date": "2026-11-03",
+      "impressions": 15834,
+      "engagements": 239,
+      "bookmarks": 56,
+      "follows": 9,
+      "unfollows": 5,
+      "profile": 36,
+      "likes": 111,
+      "replies": 11,
+      "reposts": 19
+    },
+    {
+      "date": "2026-11-04",
+      "impressions": 19476,
+      "engagements": 318,
+      "bookmarks": 61,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 64,
+      "likes": 140,
+      "replies": 13,
+      "reposts": 29
+    },
+    {
+      "date": "2026-11-05",
+      "impressions": 10156,
+      "engagements": 122,
+      "bookmarks": 15,
+      "follows": 1,
+      "unfollows": 4,
+      "profile": 23,
+      "likes": 66,
+      "replies": 5,
+      "reposts": 13
+    },
+    {
+      "date": "2026-11-06",
+      "impressions": 10186,
+      "engagements": 180,
+      "bookmarks": 33,
+      "follows": 3,
+      "unfollows": 2,
+      "profile": 19,
+      "likes": 103,
+      "replies": 9,
+      "reposts": 15
+    },
+    {
+      "date": "2026-11-07",
+      "impressions": 13604,
+      "engagements": 197,
+      "bookmarks": 45,
+      "follows": 7,
+      "unfollows": 2,
+      "profile": 20,
+      "likes": 100,
+      "replies": 2,
+      "reposts": 26
+    },
+    {
+      "date": "2026-11-08",
+      "impressions": 23940,
+      "engagements": 438,
+      "bookmarks": 130,
+      "follows": 18,
+      "unfollows": 1,
+      "profile": 64,
+      "likes": 201,
+      "replies": 4,
+      "reposts": 26
+    },
+    {
+      "date": "2026-11-09",
+      "impressions": 26506,
+      "engagements": 256,
+      "bookmarks": 67,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 37,
+      "likes": 118,
+      "replies": 6,
+      "reposts": 21
+    },
+    {
+      "date": "2026-11-10",
+      "impressions": 47706,
+      "engagements": 501,
+      "bookmarks": 165,
+      "follows": 20,
+      "unfollows": 6,
+      "profile": 48,
+      "likes": 241,
+      "replies": 6,
+      "reposts": 28
+    },
+    {
+      "date": "2026-11-11",
+      "impressions": 70696,
+      "engagements": 1024,
+      "bookmarks": 352,
+      "follows": 39,
+      "unfollows": 3,
+      "profile": 85,
+      "likes": 491,
+      "replies": 8,
+      "reposts": 54
+    },
+    {
+      "date": "2026-11-12",
+      "impressions": 11976,
+      "engagements": 174,
+      "bookmarks": 47,
+      "follows": 4,
+      "unfollows": 3,
+      "profile": 20,
+      "likes": 85,
+      "replies": 0,
+      "reposts": 14
+    },
+    {
+      "date": "2026-11-13",
+      "impressions": 9690,
+      "engagements": 133,
+      "bookmarks": 28,
+      "follows": 6,
+      "unfollows": 4,
+      "profile": 26,
+      "likes": 66,
+      "replies": 0,
+      "reposts": 12
+    },
+    {
+      "date": "2026-11-14",
+      "impressions": 13350,
+      "engagements": 201,
+      "bookmarks": 53,
+      "follows": 11,
+      "unfollows": 4,
+      "profile": 33,
+      "likes": 95,
+      "replies": 6,
+      "reposts": 11
+    },
+    {
+      "date": "2026-11-15",
+      "impressions": 11711,
+      "engagements": 152,
+      "bookmarks": 41,
+      "follows": 8,
+      "unfollows": 2,
+      "profile": 19,
+      "likes": 71,
+      "replies": 3,
+      "reposts": 14
+    },
+    {
+      "date": "2026-11-16",
+      "impressions": 7775,
+      "engagements": 119,
+      "bookmarks": 30,
+      "follows": 3,
+      "unfollows": 2,
+      "profile": 10,
+      "likes": 65,
+      "replies": 3,
+      "reposts": 8
+    },
+    {
+      "date": "2026-11-17",
+      "impressions": 11589,
+      "engagements": 209,
+      "bookmarks": 44,
+      "follows": 7,
+      "unfollows": 2,
+      "profile": 31,
+      "likes": 107,
+      "replies": 9,
+      "reposts": 17
+    },
+    {
+      "date": "2026-11-18",
+      "impressions": 6676,
+      "engagements": 117,
+      "bookmarks": 24,
+      "follows": 7,
+      "unfollows": 1,
+      "profile": 17,
+      "likes": 59,
+      "replies": 6,
+      "reposts": 10
+    },
+    {
+      "date": "2026-11-19",
+      "impressions": 42856,
+      "engagements": 382,
+      "bookmarks": 86,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 50,
+      "likes": 202,
+      "replies": 13,
+      "reposts": 22
+    },
+    {
+      "date": "2026-11-20",
+      "impressions": 22128,
+      "engagements": 193,
+      "bookmarks": 44,
+      "follows": 7,
+      "unfollows": 3,
+      "profile": 27,
+      "likes": 99,
+      "replies": 3,
+      "reposts": 15
+    },
+    {
+      "date": "2026-11-21",
+      "impressions": 9303,
+      "engagements": 115,
+      "bookmarks": 11,
+      "follows": 3,
+      "unfollows": 1,
+      "profile": 23,
+      "likes": 59,
+      "replies": 5,
+      "reposts": 14
+    },
+    {
+      "date": "2026-11-22",
+      "impressions": 7643,
+      "engagements": 88,
+      "bookmarks": 11,
+      "follows": 2,
+      "unfollows": 1,
+      "profile": 11,
+      "likes": 46,
+      "replies": 4,
+      "reposts": 16
+    }
+  ],
+  "nextAction": "PLATEAU×AIの都市映像を、読者が自分の街で試せる3手順付きで1本出す。",
+  "notes": [
+    "11月は1〜22日の22日分。月全体30日のうち途中集計なので暫定。11/23当日分は集計から除外。",
+    "同日数比較は10/1〜22。11月全体対10月全体の前月比は出さない。",
+    "直近週11/16〜22と11/9〜15は各7日完備。投稿別の累積値の前週比とは分ける。",
+    "同ジャンルの競合は公開投稿の事例抽出。全投稿監査ではなく、アカウント全体の成長やアルゴリズム変更の証拠ではない。"
+  ],
+  "insights": {
+    "observations": [
+      {
+        "title": "11月全体の到達低下、と結論するのは早い",
+        "detail": "11/1〜22は436,789表示。10/1〜22の419,668より4.1%増。保存も1,238→1,475で19.1%増だが、新規フォローは310→227で26.8%減。日別活動の同日数比較で、曜日は一致していない。",
+        "sources": []
+      },
+      {
+        "title": "失速は直近週と、フォローにつながる強さを分けて見る",
+        "detail": "11/16〜22は前週比で表示−43.7%、保存−66.8%、新規フォロー−56.7%。一方で投稿別「雪の東京駅4モデル比較」は25,066表示・63保存・4フォローで週内上位。",
+        "sources": [
+          "https://x.com/muku_sns/status/2123350518856597619"
+        ]
+      },
+      {
+        "title": "11月の強い組み合わせは、都市データ×AI映像",
+        "detail": "京都は34,111表示・339保存・12フォロー、東京駅は61,048表示・159保存・12フォロー。「撮影しなくても作れる」という意外性と、素材・作り方の具体性が本文にある。",
+        "sources": [
+          "https://x.com/muku_sns/status/2120095810314752509",
+          "https://x.com/muku_sns/status/2119218619922219503"
+        ]
+      },
+      {
+        "title": "「見られる」と「保存・フォローされる」は別",
+        "detail": "解説動画の紹介は22,991表示でも4保存・0フォロー。同週の4モデル比較は25,066表示・63保存・4フォロー。近い表示でも結果が違うので、インプ単独で次の企画を選ばない。",
+        "sources": [
+          "https://x.com/muku_sns/status/2123232503901409571",
+          "https://x.com/muku_sns/status/2123350518856597619"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "title": "視聴後に「自分も使いたい」が残る形にできていないか",
+        "detail": "他者作例の再現や作品設定が先だと、読者の用途と最初の一手が後ろに回る。11/17の再現投稿は2,071表示・25保存・0フォロー。本文の先頭を用途にし、再現できる素材・手順を添える実験が優先。",
+        "sources": [
+          "https://x.com/muku_sns/status/2122622315670212865"
+        ]
+      },
+      {
+        "title": "フォローする理由まで、作品から接続できていない可能性",
+        "detail": "同日数の日別活動で1万表示あたりの新規フォローは約7.4→5.2。これは個別投稿の転換率ではないが、到達の回復だけではフォローが戻らない兆候。次回も得られる内容を「この組み合わせの使い道を続けて検証」に絞って示す。",
+        "sources": []
+      },
+      {
+        "title": "競合の高保存例は、読者が使える工程や道具を渡している",
+        "detail": "無料GPU導入958保存、キャラ設定の再利用385保存に対し、同作者の挨拶作例は4保存。むくも作品の技術説明で終えず、「自分のキャラ・街・商品ならどう始めるか」を示す実験が有力。ただし選抜例なので成功率・原因の証明ではない。",
+        "sources": [
+          "https://x.com/Eris_Create_Lab/status/2122526010868678936",
+          "https://x.com/taki_auto/status/2124337261315858519"
+        ]
+      }
+    ],
+    "experiments": [
+      {
+        "title": "最優先：撮影せず、自分の街の紹介PVを作る3手順",
+        "detail": "京都の成功題材を単に別の都市へ置換せず、①都市素材を選ぶ ②動く経路を決める ③AIで映像化、の入口を短く見せる。新機能で楽になった工程を一つ検証し、完成映像＋工程図＋読者が最初に試す指示例の形を目指す。",
+        "sources": [
+          "https://x.com/muku_sns/status/2120095810314752509",
+          "https://x.com/muku_sns/status/2119218619922219503"
+        ],
+        "metric": "公開24時間・7日後の表示、保存、フォロー。作品だけの過去投稿は参考値として扱う。"
+      },
+      {
+        "title": "次点：同条件比較を「用途を選ぶ比較」へ変える",
+        "detail": "雪の東京駅の比較型を使い、速さ・文字・構図などのうち一項目に絞る。「どれがすごい？」で終えず、店舗紹介なら何に使えたか／使えなかったかを実物と設定で示す。",
+        "sources": [
+          "https://x.com/muku_sns/status/2123350518856597619"
+        ],
+        "metric": "表示だけでなく、保存とフォローを別集計。条件を固定した3本程度の試行で再検討する。"
+      }
+    ]
+  },
+  "competitorResearch": {
+    "observedAt": "2026-11-23T03:22:22.047572+00:00",
+    "summary": "むくの到達が落ちた時期にも、制作手順や再利用できる道具を渡す投稿には反応が集まっている。完成作品だけでなく、読者が自分で始める入口があるかを見る。",
+    "scope": "11/16〜22の同ジャンル・隣接制作支援：7件・5作者。高保存例だけでなく小さい例も収録",
+    "findings": [
+      "無料ツール14個は72,220表示・1,864保存。無料GPU導入記事は107,994表示・958保存。",
+      "同じErisの同日朝イラストは2,150表示・4保存。投稿形式・用途の違いも見る。",
+      "Blenderやキャラ動画なら一律に伸びるわけではない。機械天狗のPR作例は2,399表示・20保存。",
+      "むくへの提案は「作品＋自分の用途に置き換えられる最短手順」。手順を付ければ必ず伸びる、という因果の断定はしない。"
+    ],
+    "limitations": "公開検索で選んだ非アダルトの制作事例のみ。各作者の全投稿を取得した統計ではない。10月3件・11月7件、計6アカウント。フォロワーはGrok取得の11/23スナップショット。PR／隣接ツール／小規模の参考例はカードに明示。動画は本文で説明される用途を分析し、映像品質の順位は付けていない。",
+    "examples": [
+      {
+        "author": "taki_auto",
+        "url": "https://x.com/taki_auto/status/2122328998491656301",
+        "date": "2026-11-16",
+        "title": "画像作業を「調べる→作る→直す→仕上げる」無料ツール14個",
+        "summary": "道具の名前だけでなく、工程ごとの役割と導入の入口を提示。後半に導入ガイドの案内もある。",
+        "takeaway": "読者が次に何を入れ、何をするかまで一枚の工程に整理する。",
+        "views": 72220,
+        "likes": 829,
+        "bookmarks": 1864,
+        "observedAt": "2026-11-23T03:16:50.950Z",
+        "format": "本文＋リンク",
+        "postType": "オリジナル",
+        "eligibility": "Grokプロフィール取得：青バッジ・6,438フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "11/16〜22の高保存例"
+      },
+      {
+        "author": "Eris_Create_Lab",
+        "url": "https://x.com/Eris_Create_Lab/status/2122526010868678936",
+        "date": "2026-11-17",
+        "title": "高性能PCなしで、AIに無料GPUの生成環境を組ませる",
+        "summary": "Muse×無料GPU×Krea 2の導入検証。記事本文に設定、制約、コピー用の相談プロンプトがある。",
+        "takeaway": "できることの驚きに、導入時のつまずきを解く手順を添える。",
+        "views": 107994,
+        "likes": 517,
+        "bookmarks": 958,
+        "observedAt": "2026-11-23T03:18:23.072Z",
+        "format": "X記事",
+        "postType": "オリジナル",
+        "eligibility": "Grokプロフィール取得：青バッジ・8,120フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "11/16〜22の高保存例"
+      },
+      {
+        "author": "taki_auto",
+        "url": "https://x.com/taki_auto/status/2124337261315858519",
+        "date": "2026-11-22",
+        "title": "毎回のタグ入力を、キャラ設定の選択・固定へ変える",
+        "summary": "Character Helperで髪・目・服・表情の欄を選び、必要な欄を固定できると紹介。",
+        "takeaway": "細かな新機能を、毎回の打ち直しを減らす実用的な変化へ翻訳する。",
+        "views": 16209,
+        "likes": 306,
+        "bookmarks": 385,
+        "observedAt": "2026-11-23T03:19:15.634Z",
+        "format": "静止画付き本文",
+        "postType": "オリジナル",
+        "eligibility": "Grokプロフィール取得：青バッジ・6,438フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "11/16〜22の高保存例"
+      },
+      {
+        "author": "kagami_kami_m",
+        "url": "https://x.com/kagami_kami_m/status/2122531853882286381",
+        "date": "2026-11-17",
+        "title": "AIからX検索する公開ツールの更新",
+        "summary": "muse-grok-searchのセッション切れ対策と更新版のGitHubリンクを共有。",
+        "takeaway": "更新点だけでなく、使える実物への入口が同時にある。画像・動画専業ではなく隣接の制作支援例。",
+        "views": 83332,
+        "likes": 455,
+        "bookmarks": 869,
+        "observedAt": "2026-11-23T03:18:49.241Z",
+        "format": "本文＋GitHubリンク",
+        "postType": "オリジナル",
+        "eligibility": "Grokプロフィール取得：青バッジ・9,947フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "11/16〜22の隣接例"
+      },
+      {
+        "author": "KanaWorks_AI",
+        "url": "https://x.com/KanaWorks_AI/status/2124117901766787244",
+        "date": "2026-11-21",
+        "title": "画像も3Dモデルも使わず、HTML1枚で家の映像",
+        "summary": "コードの積層表現と音声・効果音・音楽を組み合わせるという作者の制作説明。",
+        "takeaway": "「素材を用意しなくても作れる」という制約の変化を、完成物と併記する。",
+        "views": 11377,
+        "likes": 93,
+        "bookmarks": 57,
+        "observedAt": "2026-11-23T03:21:16.065Z",
+        "format": "動画",
+        "postType": "オリジナル／有料パートナーシップ表示あり",
+        "eligibility": "Grokプロフィール取得：青バッジ・12,605フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。編集履歴リンクの最終更新日を確認。元投稿日はGrok取得日とID日時も照合。",
+        "periodLabel": "11/16〜22の映像例"
+      },
+      {
+        "author": "Eris_Create_Lab",
+        "url": "https://x.com/Eris_Create_Lab/status/2122481724081012767",
+        "date": "2026-11-17",
+        "title": "同じ作者の朝イラスト投稿は、保存4件",
+        "summary": "Erisの同日朝の挨拶・作品紹介。昼の導入記事は保存958件。単なるアカウント規模だけでは説明しきれない差がある。",
+        "takeaway": "同じ作者でも、完成物を眺める投稿と再現手順を渡す投稿を分けて比較する。",
+        "views": 2150,
+        "likes": 63,
+        "bookmarks": 4,
+        "observedAt": "2026-11-23T03:19:04.740Z",
+        "format": "静止画付き本文",
+        "postType": "オリジナル",
+        "eligibility": "Grokプロフィール取得：青バッジ・8,120フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "同作者・同日の比較例"
+      },
+      {
+        "author": "hayashimon1",
+        "url": "https://x.com/hayashimon1/status/2124399606981353497",
+        "date": "2026-11-22",
+        "title": "同ジャンルでも、3Dキャラ紹介は保存20件の例",
+        "summary": "三面図→Tripo→Blenderの機械天狗制作を作者が紹介。10月の同作者の3D投稿が大きいからといって全作品が伸びるわけではない。",
+        "takeaway": "制作ジャンルやツールの一致だけで勝ち型を決めない。経過時間・PR・題材差も残る。",
+        "views": 2399,
+        "likes": 46,
+        "bookmarks": 20,
+        "observedAt": "2026-11-23T03:20:01.481Z",
+        "format": "動画",
+        "postType": "オリジナル／#PR・有料パートナーシップ表示あり",
+        "eligibility": "Grokプロフィール取得：青バッジ・10,041フォロワー（11/23時点）",
+        "verification": "本文・対象投稿の公開指標を実画面で照合。用途と制作方法は作者の報告。",
+        "periodLabel": "同作者・比較用の小さい例"
+      }
+    ]
+  },
+  "postCount": 154,
+  "topPosts": [
+    {
+      "date": "2026-11-10",
+      "text": "これ実はドローンで撮ってません。飛ばしたのはドローンじゃなくて、国が公開してる3D都市データ（PLATEAU）とmuse。 鴨川→四条大橋→祇園→八坂の塔まで29秒。本物と見分けついたらコメントで教えてください。",
+      "url": "https://x.com/muku_sns/status/2120095810314752509",
+      "impressions": 34111,
+      "bookmarks": 339,
+      "follows": 12
+    },
+    {
+      "date": "2026-11-08",
+      "text": "Zimoさんの動画を参考に、国が無料で公開してる3D都市モデル「PLATEAU」から東京駅を切り出して、AI動画でつないだらこうなった。 作り方はシンプルでBlenderで静止画を3枚作って、あとは前の動画の最後のフレームを次の始まりにしてつなぐだけ。",
+      "url": "https://x.com/muku_sns/status/2119218619922219503",
+      "impressions": 61048,
+      "bookmarks": 159,
+      "follows": 12
+    },
+    {
+      "date": "2026-11-02",
+      "text": "これはすごいプレビズ！！先に3D空間で舞台と人物を配置して、動き・カメラの位置・撮る順番を決める。その仮映像をもとに、AIで実写やアニメにするとその通りになりますわ。 カメラワークさえわかって指示すれば、より精度の高い動画に。",
+      "url": "https://x.com/muku_sns/status/2117075213150208438",
+      "impressions": 7726,
+      "bookmarks": 86,
+      "follows": 8
+    },
+    {
+      "date": "2026-11-09",
+      "text": "今日公開された「Claude Fable 5.2」と「Opus 5.5」に、 まったく同じ1段落の指示で 映画予告のタイトル演出を作らせました。 左：Opus 5.5 右：Fable 5.2 Opusは王道の予告を、2分40秒できれいに仕上げる\"職人\"。 Fableは「1本の赤い国境線」を自分で考えて、",
+      "url": "https://x.com/muku_sns/status/2119941490969624679",
+      "impressions": 35292,
+      "bookmarks": 80,
+      "follows": 3
+    },
+    {
+      "date": "2026-11-19",
+      "text": "同じプロンプトで、4つのAIに「雪の東京駅」を3Dで作らせてみました❄️使ったのはThree.js、HTML1枚だけ。 手直しは一切なし、1回勝負です。 ・Gemini 4 Neon（202秒） ・Gemini 4 Carbon（587秒） ・Claude Opus 5.5（200秒） ・GPT-6.1 Sol（101秒）",
+      "url": "https://x.com/muku_sns/status/2123350518856597619",
+      "impressions": 25066,
+      "bookmarks": 63,
+      "follows": 4
+    }
+  ]
+}
