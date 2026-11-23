@@ -1,0 +1,175 @@
+{
+  "id": "weekly-2026-11-16",
+  "kind": "weekly",
+  "account": "muku_sns",
+  "start": "2026-11-16",
+  "end": "2026-11-22",
+  "acquiredAt": "2026-11-23T00:02:23.344223+00:00",
+  "days": 7,
+  "expectedDays": 7,
+  "provisional": false,
+  "totals": {
+    "impressions": 107970,
+    "engagements": 1223,
+    "bookmarks": 250,
+    "follows": 45,
+    "unfollows": 12,
+    "profile": 169,
+    "likes": 637,
+    "replies": 43,
+    "reposts": 102
+  },
+  "previous": {
+    "start": "2026-11-09",
+    "end": "2026-11-15",
+    "days": 7,
+    "totals": {
+      "impressions": 191635,
+      "engagements": 2441,
+      "bookmarks": 753,
+      "follows": 104,
+      "unfollows": 24,
+      "profile": 268,
+      "likes": 1167,
+      "replies": 29,
+      "reposts": 154
+    }
+  },
+  "dailySeries": [
+    {
+      "date": "2026-11-16",
+      "impressions": 7775,
+      "engagements": 119,
+      "bookmarks": 30,
+      "follows": 3,
+      "unfollows": 2,
+      "profile": 10,
+      "likes": 65,
+      "replies": 3,
+      "reposts": 8
+    },
+    {
+      "date": "2026-11-17",
+      "impressions": 11589,
+      "engagements": 209,
+      "bookmarks": 44,
+      "follows": 7,
+      "unfollows": 2,
+      "profile": 31,
+      "likes": 107,
+      "replies": 9,
+      "reposts": 17
+    },
+    {
+      "date": "2026-11-18",
+      "impressions": 6676,
+      "engagements": 117,
+      "bookmarks": 24,
+      "follows": 7,
+      "unfollows": 1,
+      "profile": 17,
+      "likes": 59,
+      "replies": 6,
+      "reposts": 10
+    },
+    {
+      "date": "2026-11-19",
+      "impressions": 42856,
+      "engagements": 382,
+      "bookmarks": 86,
+      "follows": 16,
+      "unfollows": 2,
+      "profile": 50,
+      "likes": 202,
+      "replies": 13,
+      "reposts": 22
+    },
+    {
+      "date": "2026-11-20",
+      "impressions": 22128,
+      "engagements": 193,
+      "bookmarks": 44,
+      "follows": 7,
+      "unfollows": 3,
+      "profile": 27,
+      "likes": 99,
+      "replies": 3,
+      "reposts": 15
+    },
+    {
+      "date": "2026-11-21",
+      "impressions": 9303,
+      "engagements": 115,
+      "bookmarks": 11,
+      "follows": 3,
+      "unfollows": 1,
+      "profile": 23,
+      "likes": 59,
+      "replies": 5,
+      "reposts": 14
+    },
+    {
+      "date": "2026-11-22",
+      "impressions": 7643,
+      "engagements": 88,
+      "bookmarks": 11,
+      "follows": 2,
+      "unfollows": 1,
+      "profile": 11,
+      "likes": 46,
+      "replies": 4,
+      "reposts": 16
+    }
+  ],
+  "nextAction": "同一条件のAI比較を1本再現し、公開7日後の保存・フォローを記録する。",
+  "notes": [
+    "日別概要は2026/11/16〜11/22の7日分、比較は11/9〜11/15の7日分を取得。CSVの日付を保持して集計。",
+    "表示107,970（前週191,635、43.7%減）、エンゲージメント1,223（前週2,441、49.9%減）。加重反応率1.13%（前週1.27%）。",
+    "保存250（前週753、66.8%減）、フォロー45（前週104、56.7%減）。減少原因はこの集計だけでは断定できない。",
+    "投稿別はポスト・4Wで書き出した211件中、対象週45件。保存上位は雪の東京駅の4モデル比較63件、スイス山村37件、渋谷プリビズ31件。",
+    "投稿別の値は取得時点の累積値で、日別活動の合計とは別。投稿別の前週比や投稿時間の優劣は算出しない。"
+  ],
+  "postCount": 45,
+  "topPosts": [
+    {
+      "date": "2026-11-19",
+      "text": "同じプロンプトで、4つのAIに「雪の東京駅」を3Dで作らせてみました❄️使ったのはThree.js、HTML1枚だけ。 手直しは一切なし、1回勝負です。 ・Gemini 4 Neon（202秒） ・Gemini 4 Carbon（587秒） ・Claude Opus 5.5（200秒） ・GPT-6.1 Sol（101秒）",
+      "url": "https://x.com/muku_sns/status/2123350518856597619",
+      "impressions": 25013,
+      "bookmarks": 63,
+      "follows": 4
+    },
+    {
+      "date": "2026-11-18",
+      "text": "この村、人間は1回もBlenderを触っていません。作ったのはGPT-6.2 Astra。スイスの山村をイメージした「Valbrune」です🤖✨ 使ってみて分かった、6.2 Astraの特徴は3つ👇 ① 長い仕事を1人でやり切る",
+      "url": "https://x.com/muku_sns/status/2123048325247373643",
+      "impressions": 4097,
+      "bookmarks": 37,
+      "follows": 1
+    },
+    {
+      "date": "2026-11-16",
+      "text": "渋谷のヒカリエの景色をプレビズで作成して、Gemini Omniで加工！ 最近Gemini ULTRAにしたから動画が無限に作成できて色々できる。クレジットも30％従来より下がっててマジで強い。",
+      "url": "https://x.com/muku_sns/status/2122268429549986101",
+      "impressions": 2369,
+      "bookmarks": 31,
+      "follows": 1
+    },
+    {
+      "date": "2026-11-17",
+      "text": "おすすめに流れてきたみとさんの投稿が面白かったので再現！ ヘッドホンの音が、光球になる。東京娘の必殺技「サウンドバースト」🎧💚 光球 → 溜め → 着弾。 渋谷の夜を撃ち抜く15秒です⚡️ ① プリビズ Blenderの箱人形で、カメラ・構図・タイミングを先に決める ② AI生成",
+      "url": "https://x.com/muku_sns/status/2122622315670212865",
+      "impressions": 2069,
+      "bookmarks": 25,
+      "follows": 0
+    },
+    {
+      "date": "2026-11-19",
+      "text": "最近Blender×AIでできることが凄すぎて。GPT6.2で作った日本の村の再現度が本当半端ないんよな。 しかもこれ作ったのも、操作してるのも、動画を編集したのも全部AI... もう来年どこまで行くのか楽しみよ。",
+      "url": "https://x.com/muku_sns/status/2123407312241262670",
+      "impressions": 1682,
+      "bookmarks": 13,
+      "follows": 0
+    }
+  ]
+}
