@@ -21,6 +21,13 @@
     "provisional": false
   },
   {
+    "id": "monthly-2026-11-01",
+    "kind": "monthly",
+    "start": "2026-11-01",
+    "end": "2026-11-22",
+    "provisional": true
+  },
+  {
     "id": "weekly-2026-10-26",
     "kind": "weekly",
     "start": "2026-10-26",

@@ -25,8 +25,26 @@ const inputNotes=JSON.parse(fs.readFileSync(notesFile,'utf8'));
 const notes=Array.isArray(inputNotes)?inputNotes:inputNotes.notes;
 const nextAction=typeof inputNotes.nextAction==='string'?inputNotes.nextAction:'上位投稿の型を1本再現し、保存とフォローで検証する。';
 if(!Array.isArray(notes)||!notes.every(n=>typeof n==='string'))throw Error('Notes must be string[]');
+const calendarEnd=kind==='monthly'?new Date(Date.UTC(Number(start.slice(0,4)),Number(start.slice(5,7)),0)).toISOString().slice(0,10):end;
+const ongoingMonth=kind==='monthly'&&end<calendarEnd;
+const calendarExpectedDays=kind==='monthly'?Number(calendarEnd.slice(8)):expectedDays;
+// Interim months use an explicitly labelled equal-day comparison, never a partial/full-month ratio.
+const matchedEnd=shift(priorStart,expectedDays-1);
+const matchedRows=mergeRows([],daily.data).filter(r=>r.date>=priorStart&&r.date<=matchedEnd);
+const matchedComparison=ongoingMonth&&matchedEnd<=priorEnd&&matchedRows.length===expectedDays?{start:priorStart,end:matchedEnd,days:expectedDays,totals:sum(matchedRows)}:null;
+const insights=inputNotes.insights??null;
+if(insights){
+ for(const k of ['observations','hypotheses','experiments']){
+  if(!Array.isArray(insights[k])||!insights[k].every(x=>typeof x.title==='string'&&typeof x.detail==='string'&&(!x.sources||x.sources.every(u=>/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/\d+$/.test(u)))))throw Error('Invalid insights '+k);
+ }
+}
+const competitorResearch=inputNotes.competitorResearch??null;
+if(competitorResearch){
+ if(!Array.isArray(competitorResearch.examples)||!competitorResearch.examples.every(x=>/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/\d+$/.test(x.url)&&x.date>=start&&x.date<=end&&typeof x.summary==='string'&&Number.isFinite(Date.parse(x.observedAt))&&['views','likes','bookmarks'].every(k=>x[k]==null||(Number.isFinite(x[k])&&x[k]>=0))))throw Error('Invalid competitor examples');
+ if(new Set(competitorResearch.examples.map(x=>x.url)).size!==competitorResearch.examples.length)throw Error('Duplicate competitor URLs');
+}
 const id=`${kind}-${start}`;
-const result={id,kind,account:'muku_sns',start,end,acquiredAt,days:days.length,expectedDays,provisional:end>=acquiredDay||days.length!==expectedDays,totals,previous,dailySeries,nextAction,notes,postCount:rows.length,topPosts:rows.sort((a,b)=>(b.bookmarks??-1)-(a.bookmarks??-1)).slice(0,5).map(r=>({date:r.date,text:r.text.slice(0,220),url:r.url,impressions:r.impressions,bookmarks:r.bookmarks,follows:r.follows}))};
+const result={id,kind,account:'muku_sns',start,end,calendarEnd,calendarExpectedDays,acquiredAt,days:days.length,expectedDays,provisional:ongoingMonth||end>=acquiredDay||days.length!==expectedDays,totals,previous,matchedComparison,dailySeries,nextAction,notes,insights,competitorResearch,postCount:rows.length,topPosts:rows.sort((a,b)=>(b.bookmarks??-1)-(a.bookmarks??-1)).slice(0,5).map(r=>({date:r.date,text:r.text.slice(0,220),url:r.url,impressions:r.impressions,bookmarks:r.bookmarks,follows:r.follows}))};
 const dir=fileURLToPath(new URL('../reports/',import.meta.url));fs.mkdirSync(dir,{recursive:true});
 const manifestPath=path.join(dir,'index.json');
 let manifest=fs.existsSync(manifestPath)?JSON.parse(fs.readFileSync(manifestPath,'utf8')):[];
