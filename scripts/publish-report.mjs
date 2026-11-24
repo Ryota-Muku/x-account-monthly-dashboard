@@ -1,10 +1,12 @@
+import {checkedAccount} from '../accounts.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {importCSV,mergeRows,shift} from '../analytics.mjs';
-const [kind,start,end,dailyFile,postFile,notesFile,acquiredAt]=process.argv.slice(2);
-if(!['weekly','monthly'].includes(kind)||![start,end].every(v=>/^\d{4}-\d{2}-\d{2}$/.test(v||''))||start>end||!acquiredAt||!Number.isFinite(Date.parse(acquiredAt)))throw Error('Usage: node scripts/publish-report.mjs weekly|monthly START END DAILY.csv POSTS.csv NOTES.json ACQUIRED_AT_ISO');
-const daily=importCSV(fs.readFileSync(dailyFile,'utf8')), posts=importCSV(fs.readFileSync(postFile,'utf8'));
+const [kind,start,end,dailyFile,postFile,notesFile,acquiredAt,accountArg]=process.argv.slice(2);
+if(!['weekly','monthly'].includes(kind)||![start,end].every(v=>/^\d{4}-\d{2}-\d{2}$/.test(v||''))||start>end||!acquiredAt||!Number.isFinite(Date.parse(acquiredAt)))throw Error('Usage: node scripts/publish-report.mjs weekly|monthly START END DAILY.csv POSTS.csv NOTES.json ACQUIRED_AT_ISO [muku_sns|mukuax]');
+const account=checkedAccount(accountArg);
+const daily=importCSV(fs.readFileSync(dailyFile,'utf8'),account), posts=importCSV(fs.readFileSync(postFile,'utf8'),account);
 if(daily.type!=='daily'||posts.type!=='post')throw Error('Wrong CSV types');
 const selected=x=>mergeRows([],x).filter(r=>r.date>=start&&r.date<=end);
 const days=selected(daily.data), rows=selected(posts.data);
@@ -43,11 +45,11 @@ if(competitorResearch){
  if(!Array.isArray(competitorResearch.examples)||!competitorResearch.examples.every(x=>/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/\d+$/.test(x.url)&&x.date>=start&&x.date<=end&&typeof x.summary==='string'&&Number.isFinite(Date.parse(x.observedAt))&&['views','likes','bookmarks'].every(k=>x[k]==null||(Number.isFinite(x[k])&&x[k]>=0))))throw Error('Invalid competitor examples');
  if(new Set(competitorResearch.examples.map(x=>x.url)).size!==competitorResearch.examples.length)throw Error('Duplicate competitor URLs');
 }
-const id=`${kind}-${start}`;
-const result={id,kind,account:'muku_sns',start,end,calendarEnd,calendarExpectedDays,acquiredAt,days:days.length,expectedDays,provisional:ongoingMonth||end>=acquiredDay||days.length!==expectedDays,totals,previous,matchedComparison,dailySeries,nextAction,notes,insights,competitorResearch,postCount:rows.length,topPosts:rows.sort((a,b)=>(b.bookmarks??-1)-(a.bookmarks??-1)).slice(0,5).map(r=>({date:r.date,text:r.text.slice(0,220),url:r.url,impressions:r.impressions,bookmarks:r.bookmarks,follows:r.follows}))};
+const id=`${account==='muku_sns'?'':account+'-'}${kind}-${start}`;
+const result={id,kind,account,start,end,calendarEnd,calendarExpectedDays,acquiredAt,days:days.length,expectedDays,provisional:ongoingMonth||end>=acquiredDay||days.length!==expectedDays,totals,previous,matchedComparison,dailySeries,nextAction,notes,insights,competitorResearch,postCount:rows.length,topPosts:rows.sort((a,b)=>(b.bookmarks??-1)-(a.bookmarks??-1)).slice(0,5).map(r=>({date:r.date,text:r.text.slice(0,220),url:r.url,impressions:r.impressions,bookmarks:r.bookmarks,follows:r.follows}))};
 const dir=fileURLToPath(new URL('../reports/',import.meta.url));fs.mkdirSync(dir,{recursive:true});
 const manifestPath=path.join(dir,'index.json');
 let manifest=fs.existsSync(manifestPath)?JSON.parse(fs.readFileSync(manifestPath,'utf8')):[];
-manifest=manifest.filter(r=>r.id!==id);manifest.push({id,kind,start,end,provisional:result.provisional});manifest.sort((a,b)=>b.start.localeCompare(a.start));
+manifest=manifest.filter(r=>r.id!==id);manifest.push({id,account,kind,start,end,provisional:result.provisional});manifest.sort((a,b)=>b.start.localeCompare(a.start));
 fs.writeFileSync(path.join(dir,id+'.json'),JSON.stringify(result,null,2)+'\n');fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
 console.log(JSON.stringify({id,days:days.length,postCount:rows.length,provisional:result.provisional}));

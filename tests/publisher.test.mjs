@@ -9,6 +9,7 @@ test('monthly publisher keeps interim status, equal-day baseline, history and ro
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'x-publisher-test-'));
  const repo=fileURLToPath(new URL('../',import.meta.url));
  fs.mkdirSync(path.join(root,'scripts'));fs.mkdirSync(path.join(root,'reports'));
+ fs.copyFileSync(path.join(repo,'accounts.mjs'),path.join(root,'accounts.mjs'));
  fs.copyFileSync(path.join(repo,'analytics.mjs'),path.join(root,'analytics.mjs'));
  fs.copyFileSync(path.join(repo,'scripts/publish-report.mjs'),path.join(root,'scripts/publish-report.mjs'));
  const existing=[{id:'weekly-2026-10-19',kind:'weekly',start:'2026-10-19',end:'2026-10-25'}];
