@@ -1,3 +1,4 @@
+import {checkedAccount} from './accounts.mjs';
 // CSV data never leaves the browser. Missing metrics remain null, not zero.
 export const METRICS = {
   impressions: ['Impressions', 'Views', 'インプレッション数', 'インプレッション', '表示回数'],
@@ -63,7 +64,8 @@ export function dateValue(raw) {
   const time = Date.parse(stamp);
   return Number.isFinite(time) ? new Date(time + 9 * 3600000).toISOString().slice(0, 10) : null;
 }
-export function importCSV(text) {
+export function importCSV(text, account = 'muku_sns') {
+  checkedAccount(account);
   const { headers, rows } = parseCSV(text);
   const find = names => headers.findIndex(h => names.map(normalize).includes(normalize(h)));
   const dateCol = find(['Date', 'Time', 'Post time', 'Created at', '日付', '日時', '投稿日時']);
@@ -84,13 +86,13 @@ export function importCSV(text) {
     }));
     const url = urlCol < 0 ? '' : r[urlCol].trim();
     const id = idCol < 0 ? '' : r[idCol].trim();
-    if (url && !/^https:\/\/(?:www\.)?(?:x|twitter)\.com\/(?:muku_sns|i\/web)\/status\/\d+(?:[/?#].*)?$/i.test(url)) {
-      throw Error(`${i + 2}行目の投稿URLが muku_sns の投稿として確認できません。`);
+    if (url && !new RegExp('^https://(?:www\\.)?(?:x|twitter)\\.com/(?:'+account+'|i/web)/status/\\d+(?:[/?#].*)?$','i').test(url)) {
+      throw Error(`${i + 2}行目の投稿URLが ${account} の投稿として確認できません。`);
     }
     const text = textCol < 0 ? '' : r[textCol];
     const key = type === 'daily' ? date : id || url.match(/\/status\/(\d+)/)?.[1];
     if (!key) throw Error(`${i + 2}行目: 重複防止のため投稿IDまたは投稿URLが必要です。`);
-    return { key, date, text, url: url || (type === 'post' && /^\d+$/.test(id) ? `https://x.com/muku_sns/status/${id}` : ''), ...values };
+    return { key, date, text, url: url || (type === 'post' && /^\d+$/.test(id) ? `https://x.com/${account}/status/${id}` : ''), ...values };
   });
   return { type, data, headers };
 }

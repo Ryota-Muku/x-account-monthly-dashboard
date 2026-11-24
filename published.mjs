@@ -1,11 +1,16 @@
+import {forAccount,reportAccount} from './accounts.mjs';
 import {esc,num,pct,er,change,lineChart,bars,donut,radar} from './charts.mjs';
 import {matchedPeriod,analysisContent,competitorContent} from './report-content.mjs';
 const $=id=>document.getElementById(id);let reports=[],generation=0;
+const initial=new URLSearchParams(location.search).get('account');
+$('accountSelect').value=initial==='mukuax'?'mukuax':'muku_sns';
+function labels(){const account=$('accountSelect').value;document.querySelectorAll('[data-account]').forEach(e=>e.textContent='@'+account);document.querySelectorAll('[data-legacy]').forEach(e=>{e.hidden=account!=='muku_sns'});document.querySelectorAll('[data-monthly]').forEach(e=>e.href='?account='+account+'&kind=monthly');}
+labels();
 async function show(){
  const token=++generation,id=$('reportHistory').value;
- if(!id){$('publishedBody').innerHTML='<p>月次は毎月1日に更新。まだレポートがありません。</p>';$('reportMeta').textContent='未作成';return;}
+ if(!id){$('publishedBody').textContent='@'+$('accountSelect').value+' の'+($('reportKind').value==='monthly'?'月次':'週次')+'レポートは未作成です。初回の本人Analytics CSVは未取得。Xで対象アカウントにログインし、Analytics利用可否とCSV取得を確認する必要があります。別アカウントのデータや0では代用しません。';$('reportMeta').textContent='未作成';return;}
  try{
- const res=await fetch(`reports/${encodeURIComponent(id)}.json`,{cache:'no-store'});if(!res.ok)throw Error('fetch');const r=await res.json();if(token!==generation)return;
+ const res=await fetch(`reports/${encodeURIComponent(id)}.json`,{cache:'no-store'});if(!res.ok)throw Error('fetch');const r=await res.json();if(token!==generation)return;if(reportAccount(r)!==$('accountSelect').value)throw Error('Account mismatch');
  const t=r.totals,prior=!r.provisional?r.previous?.totals:null;
  $('reportMeta').textContent=`${r.start} 〜 ${r.end} · ${r.provisional?(r.kind==='monthly'?'暫定（月途中・取得範囲まで）':'暫定（期間途中／未完備）'):'期間終了'} · ${r.days}/${r.expectedDays}日取得${r.calendarExpectedDays&&r.calendarExpectedDays!==r.expectedDays?`（月全体 ${r.calendarExpectedDays}日）`:''} · 取得 ${new Date(r.acquiredAt).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})} JST`;
  const delta=(a,b)=>{const v=change(a,b);return v==null?'比較なし':`${v>=0?'+':''}${v.toFixed(1)}%`};
@@ -25,6 +30,7 @@ async function show(){
  $('lineMetric').addEventListener('change',renderLine);$('rankMetric').addEventListener('change',renderRank);renderLine();renderRank();
  }catch(e){if(token===generation)$('publishedBody').textContent='読み込みに失敗しました。再読み込みしてください。';}
 }
-function choose(preferred){const list=reports.filter(r=>r.kind===$('reportKind').value);$('reportHistory').innerHTML=list.map(r=>`<option value="${esc(r.id)}">${esc(r.start)} 〜 ${esc(r.end)}${r.provisional?'（暫定）':''}</option>`).join('');if(typeof preferred==='string'&&list.some(r=>r.id===preferred))$('reportHistory').value=preferred;const u=new URL(location.href);u.searchParams.set('kind',$('reportKind').value);if($('reportHistory').value)u.searchParams.set('report',$('reportHistory').value);history.replaceState(null,'',u);show();}
+function choose(preferred){const list=forAccount(reports,$('accountSelect').value,$('reportKind').value);$('reportHistory').innerHTML=list.map(r=>`<option value="${esc(r.id)}">${esc(r.start)} 〜 ${esc(r.end)}${r.provisional?'（暫定）':''}</option>`).join('');if(typeof preferred==='string'&&list.some(r=>r.id===preferred))$('reportHistory').value=preferred;const u=new URL(location.href);u.searchParams.set('account',$('accountSelect').value);u.searchParams.set('kind',$('reportKind').value);u.searchParams.delete('report');if($('reportHistory').value)u.searchParams.set('report',$('reportHistory').value);history.replaceState(null,'',u);show();}
+$('accountSelect').addEventListener('change',()=>{labels();choose();});
 $('reportKind').addEventListener('change',()=>choose());$('reportHistory').addEventListener('change',()=>{const u=new URL(location.href);u.searchParams.set('report',$('reportHistory').value);history.replaceState(null,'',u);show();});
 try{const res=await fetch('reports/index.json',{cache:'no-store'});if(!res.ok)throw Error('fetch');reports=await res.json();const q=new URLSearchParams(location.search);if(['weekly','monthly'].includes(q.get('kind')))$('reportKind').value=q.get('kind');choose(q.get('report'));}catch{$('publishedBody').textContent='公開レポートの読込に失敗しました。';}

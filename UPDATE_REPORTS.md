@@ -6,16 +6,16 @@ Owner authorization: Discord channel 1563544720830103582, message 15638120065057
 - Monthly: first day 09:30 Asia/Tokyo, previous calendar month; compare preceding month only if fully covered.
 - Site: https://x-account-monthly-dashboard.vercel.app/
 - Repository: Ryota-Muku/x-account-monthly-dashboard (main auto-deploys via Vercel).
-- Private downloads: /Users/openclaw/Documents/x-analytics-private/YYYY-MM-DD/. Never commit raw CSV, normalized rows, credentials or unrelated notes.
+- Private downloads: /Users/openclaw/Documents/x-analytics-private/<account>/YYYY-MM-DD/. Never commit raw CSV, normalized rows, credentials or unrelated notes.
 
 ## Execution
 
-1. Read browser-automation and social-csv-analytics skills. Inspect profiles and tabs; reuse only this task's tab. Confirm profile link `/muku_sns`. The managed `openclaw` profile was logged in on 2026-10-25; the `user` profile failed to attach, which does not mean X is logged out. Don't close other tasks' tabs.
+1. Read browser-automation and social-csv-analytics skills. Inspect profiles and tabs; reuse only this task's tab. For each account, confirm the exact profile link `/muku_sns` or `/mukuax`; never infer identity from the browser profile name. The managed `openclaw` profile was logged in on 2026-10-25; the `user` profile failed to attach, which does not mean X is logged out. Don't close other tasks' tabs.
 2. Navigate Creator Studio -> Analytics. Export Overview (daily) and Content (post) CSVs for the required period and comparison. Use explicit dates or a sufficiently broad range; verify CSV minimum/maximum dates and coverage. Use 3M for monthly only if that UI option still exists. Latest exports had English weekday dates and Japanese headers. Download-save errors may coexist with a real file in `/tmp/openclaw/downloads`; verify existence, modification time and contents, never equate a click with success.
 3. Save source files privately. If authentication, permissions, download or coverage fails, report the exact blocker to Discord; retain existing published report. Do not ask user for CSV until actually checking access. Do not invent missing values or mark incomplete data final.
 4. Use the local parser in `analytics.mjs`. Analyze daily totals and post-level results separately; write a JSON array of concise Japanese findings/actions to a private notes file. Do not infer causes as facts. Post CSV values may be cumulative. Date-only exports retain their calendar dates; do not invent a timezone conversion. Don't send data to unapproved external AIs.
 5. Fresh clone/fetch this repo in a durable workspace under `/Users/openclaw/Documents/projects/`. Preserve uncommitted work; use an isolated branch when needed. Read current instructions first. Run:
-   `node scripts/publish-report.mjs weekly|monthly START END DAILY.csv POSTS.csv NOTES.json ACQUIRED_AT_ISO`
+   `node scripts/publish-report.mjs weekly|monthly START END DAILY.csv POSTS.csv NOTES.json ACQUIRED_AT_ISO ACCOUNT`
    The script writes only a summary and top five public-post references into `reports/`, and updates its manifest without deleting history. Acquisition timestamp must be the actual time of this export, not job start or an old file timestamp. Inspect output, days, expectedDays and provisional. Monthly stays separate from the legacy archive.
 6. Test parser (`node --test tests/analytics.test.mjs`), JS syntax and report schema; verify HTML rendering with a browser. Stage only intended code/reports (no raw data). Commit/push, merge through normal repo permissions without bypassing failed checks. Publishing these report summaries is authorized by the user. Do not change access controls.
 7. Verify the production report JSON and rendered page actually show the new period and timestamp. Don't claim success for a push alone. Notify Discord #42 (channel 1563544720830103582), mention 1048469507691266180, include URL, period, 2–3 findings and provisional/coverage caveats. On failure give exact blocker and keep the previous timestamp.
@@ -33,3 +33,15 @@ Keep the default view chart-first: daily line, top-post bars, reaction donut, pr
 - AI画像・動画・3D制作の非アダルト事例を対象にする。公式・成人向け・判定回避ノウハウは比較対象から除外。同じ作者の低反応例も可能な範囲で含め、全投稿の平均・成長率とは呼ばない。大きいアカウントは規模差を明示。対象IDと元投稿の公開指標を実画面で確認し、引用元・返信の数字を混ぜない。
 - 月途中は月末まで未完了として `provisional` を保持。前月全体比を出さず、完全な前月データから同じ日数の `matchedComparison` を生成する。月末の本更新では暫定月次を同IDで置換する。取得失敗時に過去の競合例を新規確認扱いにしない。
 - 生CSVと全件正規化データを公開しない。公開は集計値・選んだ本人投稿・競合の短い独自要約だけ。毎回の公開後に月次入口・履歴・考察・競合の描画とスマホ表示を照合する。
+
+
+## 2アカウント運用（2026-11-25 本人依頼）
+出典：https://discord.com/channels/1527452039737508022/1573254705235099688/1574822985825779793
+- 既存の週次・月次2ジョブ内で **muku_sns、mukuax を個別に実行**。重複ジョブは作らない。時刻・Sol・#42通知を維持する。
+- URLは `/?account=muku_sns&kind=weekly` と `/?account=mukuax&kind=weekly`（月次はkind=monthly）。履歴・グラフ・競合・考察・指標はアカウント間で合算・流用しない。
+- generator末尾のACCOUNTは必ず明示：`muku_sns` または `mukuax`。旧省略呼出しだけは後方互換でmuku_sns。muku_snsの旧ID/ファイルはそのまま維持、mukuaxのIDは `mukuax-weekly-YYYY-MM-DD` / `mukuax-monthly-YYYY-MM-DD`。
+- 原CSVとノートは `/Users/openclaw/Documents/x-analytics-private/<account>/YYYY-MM-DD/` に分離。CSVに所有者がない場合はログイン中のプロフィールで出所を記録。識別できる他人/他アカウントURLは拒否する。匿名のi/web URLや数字ID単独は本人の証明ではない。
+- 片方のログイン/取得が失敗しても、もう片方の正常な更新は完了させる。失敗した側の取得日時・既存レポートを上書きしない。初回未取得なら未作成のままにし、0や他方の実績で埋めない。成功/失敗をアカウントごとに通知する。
+- @mukuax はAI活用・制作実務（Web/ツール/3D/動画など）に合わせて独自の考察・公開競合調査を行う。muku_snsの競合例を自動コピーしない。Grokへ送るのは公開情報だけ。
+- 2026-11-25初回確認：managed openclawは@muku_snsのみログイン、account menuにmukuaxなし。managed mukuaxはXログイン画面、Analytics直行もログインへ遷移。user接続失敗。@mukuaxのAnalytics利用権・CSV互換・初回分析は未確認。mukuaxブラウザで本人のXログイン完了後、実際のプロフィール一致とAnalytics利用可否を確認して取得を再開する。
+- 投稿時刻分析 timing.html と旧 archive.html はmuku_sns専用。mukuax画面から隠す。別サイトmuku-ai-dailyと日次ネタ出しjobは変更しない。

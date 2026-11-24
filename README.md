@@ -1,4 +1,4 @@
-# むく X週次投稿分析 / @muku_sns
+# むく X週次・月次投稿分析 / @muku_sns・@mukuax
 
 公開URL: https://x-account-monthly-dashboard.vercel.app/
 
@@ -46,3 +46,10 @@ python3 -m http.server 8766 --bind 127.0.0.1
 ローカルURL: http://127.0.0.1:8766/ （ES modulesを使うためHTMLの直接ダブルクリックではなくHTTPで開く）。
 
 デフォルトブランチへのpushはVercelの本番デプロイをトリガーします。
+
+
+## アカウント分離
+`/?account=mukuax` でむくax、`/?account=muku_sns` で既存分析。画面で切替可能。
+旧manifestのaccount省略項目はmuku_snsとして扱い、履歴を保持する。
+手動CSVも選択アカウントだけに読み込み、切替時は消去。所有者不明のCSVは取得元の本人確認が必要。
+週次/月次更新手順は UPDATE_REPORTS.md。mukuax初回CSVはログイン待ちのため未取得（2026-11-25）。

@@ -1,3 +1,4 @@
+import {checkedAccount} from './accounts.mjs';
 import { importCSV, mergeRows, summarize, rate, shift, monday } from './analytics.mjs';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -8,6 +9,7 @@ let report = null;
 $('start').value = monday(new Date(Date.now() + 9 * 3600000).toISOString().slice(0,10));
 $('accountConfirm').addEventListener('change', () => { $('csvInput').disabled = !$('accountConfirm').checked; });
 $('csvInput').addEventListener('change', async event => {
+  const account = checkedAccount($('accountSelect').value);
   const files = [...event.target.files];
   if (!files.length) return;
   $('csvInput').disabled = true;
@@ -16,8 +18,9 @@ $('csvInput').addEventListener('change', async event => {
     const incoming = [];
     for (const file of files) {
       if (file.size > 20 * 1024 * 1024) throw Error('CSVは1ファイル20MBまでです。期間を分けてください。');
-      incoming.push({...importCSV(await file.text()), name: file.name});
+      incoming.push({...importCSV(await file.text(), account), name: file.name});
     }
+    if ($('accountSelect').value !== account) return;
     const next = {...datasets};
     for (const item of incoming) next[item.type] = mergeRows(next[item.type], item.data);
     datasets = next;
@@ -82,15 +85,17 @@ function render() {
     return `<tr><td>${title}</td>${values.map((v,i)=>`<td>${v}${i===0&&!r.missing&&r.impressions!==null?`<div class="bar" style="width:${r.impressions/max*100}%"></div>`:''}</td>`).join('')}</tr>`;
   }).join('') : '<tr><td colspan="7" class="empty">この期間の投稿データはありません</td></tr>';
   $('tableNote').textContent = type==='daily'?'未取込日と0の実績は区別します。':'並び順はCSV記載値の比較です。取得できない指標は末尾に表示します。';
-  report = {account:'muku_sns',start,end:current.end,source:type,provisional:ongoing,totals:t,engagementRate:er,previousWeekComparable:comparable,previousWeek:comparable?previous.totals:null,notes:insights,rows:current.rows};
+  report = {account:$('accountSelect').value,start,end:current.end,source:type,provisional:ongoing,totals:t,engagementRate:er,previousWeekComparable:comparable,previousWeek:comparable?previous.totals:null,notes:insights,rows:current.rows};
   $('export').disabled = !current.rows.length;
 }
 for (const id of ['start','source','sort']) $(id).addEventListener('change', render);
 for (const [id,days] of [['prev',-7],['next',7]]) $(id).addEventListener('click',()=>{if(!$('start').value)return;$('start').value=shift($('start').value,days);render();});
-$('clear').addEventListener('click',()=>{datasets={daily:[],post:[]};$('status').className='';$('status').textContent='取込データを消去しました。';$('accountConfirm').checked=false;$('csvInput').disabled=true;render();});
+function clearData(){datasets={daily:[],post:[]};$('status').className='';$('status').textContent='取込データを消去しました。';$('accountConfirm').checked=false;$('csvInput').disabled=true;render();}
+$('clear').addEventListener('click',clearData);
+$('accountSelect').addEventListener('change',clearData);
 $('export').addEventListener('click',()=>{
   if (!report) return;
   const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));
-  const a=document.createElement('a');a.href=url;a.download=`muku_sns-${report.start}-${report.source}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const a=document.createElement('a');a.href=url;a.download=`${report.account}-${report.start}-${report.source}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 render();
